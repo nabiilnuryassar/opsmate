@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [2026-06-01] - docs - Sinkronisasi README dengan kondisi aktual
+- Type: docs
+- Area: root docs
+- Summary: Memperbarui README utama agar sesuai kondisi repo saat ini: menghapus kredensial demo placeholder `rina@opsmate.test`, memperbaiki typo stack (`Tailwind CSS v4`), menormalkan informasi testing menjadi non-angka agar tidak cepat stale, dan menyelaraskan runtime backend menjadi `PHP 8.3+` sesuai requirement project.
+- Risk: none (dokumentasi saja)
+- Docs: README.md
+
 ## [2026-05-31] - docs - User Guide, API Reference & Architecture Docs
 - Type: docs
 - Area: docs

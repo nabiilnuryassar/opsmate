@@ -10,7 +10,7 @@ Catat order, kelola customer & stok, buat invoice, kirim reminder, dan dapatkan 
 ![React](https://img.shields.io/badge/React-19-61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1)
-![Tests](https://img.shields.io/badge/tests-109%20backend%20%2B%2055%20frontend-success)
+![Tests](https://img.shields.io/badge/tests-backend%20%2B%20frontend-available-success)
 
 </div>
 
@@ -41,8 +41,8 @@ OpsMate membantu owner bisnis kecil supaya bisnisnya **lebih rapi, tidak ada yan
 
 | Layer | Teknologi |
 | ----- | --------- |
-| Frontend | React 19, TypeScript, Vite, Tlwind CSS v4, TanStack Query, Zustand, React Hook Form + Zod, React Router, Recharts |
-| Backend | Laravel 13 (API-only), Sanctum, PHP 8.4, DomPDF |
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS v4, TanStack Query, Zustand, React Hook Form + Zod, React Router, Recharts |
+| Backend | Laravel 13 (API-only), Sanctum, PHP 8.3+, DomPDF |
 | Data | PostgreSQL 16, Redis 7 (cache/session/queue/rate-limit) |
 | AI | OpenAI-compatible API via controlled tools + **fallback deterministik** (jalan tanpa API key) |
 | Infra | Docker Compose (dev & prod), nginx + php-fpm (prod) |
@@ -70,12 +70,6 @@ make fresh
 #    API      : http://localhost:8000
 ```
 
-Login demo (setelah `make fresh`):
-
-```
-Email    : rina@opsmate.test
-Password : password
-```
 
 ### Perintah berguna
 
@@ -134,8 +128,8 @@ Detail lengkap (TLS, scheduler, queue) di [docs/RUNBOOK.md](docs/RUNBOOK.md).
 
 ## Testing
 
-- **Backend:** 109 test (tiap fitur menguji happy path, auth, isolasi tenant, validasi).
-- **Frontend:** 55 test (komponen + logika).
+- **Backend:** test suite tersedia (Pest/PHPUnit) dengan cakupan fitur utama (happy path, auth, isolasi tenant, validasi).
+- **Frontend:** test suite tersedia (Vitest + Testing Library) untuk komponen dan logika.
 
 ```bash
 make test-backend
