@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuthStore } from '@/stores/auth-store'
 import { useMe } from '@/features/auth/api/auth-api'
+import { LoadingState } from './LoadingState'
 
 /** Route guard: redirect to /login when there is no valid session. */
 export function ProtectedRoute() {
@@ -13,11 +14,7 @@ export function ProtectedRoute() {
   }
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center text-sm text-neutral-500">
-        Memuat...
-      </div>
-    )
+    return <LoadingState message="Menyiapkan sesi..." fullscreen />
   }
 
   if (isError) {

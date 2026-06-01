@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react'
 import { AppShell } from '@/components/layout/AppShell'
 import { Card, CardTitle } from '@/components/ui/card'
+import { LoadingState } from '@/components/shared/LoadingState'
 import { useMe } from '@/features/auth/api/auth-api'
 import { useDailyReport } from '../api/reports-api'
 import { ReportMetrics } from '../components/ReportMetrics'
@@ -62,7 +63,7 @@ export function DailyReportPage() {
         </div>
 
         {isLoading || !report ? (
-          <p className="text-sm text-neutral-500">Memuat laporan...</p>
+          <LoadingState message="Memuat laporan..." />
         ) : (
           <>
             <div className="gradient-soft-ai rounded-[20px] border border-ai-100 p-4">

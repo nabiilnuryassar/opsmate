@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Sparkles, Plus, LogOut } from 'lucide-react'
+import { Plus, LogOut } from 'lucide-react'
 import { SIDEBAR_NAV } from './nav-config'
 import { cn } from '@/lib/utils'
 
@@ -13,9 +13,7 @@ export function DesktopSidebar({ onNewEntry, onLogout }: DesktopSidebarProps) {
   return (
     <aside className="fixed inset-y-0 left-0 hidden w-[260px] flex-col border-r border-neutral-200 bg-white px-4 py-5 lg:flex">
       <div className="mb-6 flex items-center gap-2 px-2">
-        <span className="flex h-9 w-9 items-center justify-center rounded-[12px] bg-primary-700 text-white">
-          <Sparkles className="h-5 w-5" />
-        </span>
+        <img src="/logo.png" alt="OpsMate AI" className="h-9 w-9 rounded-[12px]" />
         <div className="leading-tight">
           <p className="text-base font-bold text-neutral-900">OpsMate AI</p>
           <p className="text-xs text-neutral-500">SME Manager</p>

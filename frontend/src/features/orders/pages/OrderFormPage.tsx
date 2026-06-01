@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { ArrowLeft, Plus, Minus, Trash2, Search } from 'lucide-react'
+import { ArrowLeft, Plus, Minus, Trash2, Search, UserPlus, RotateCcw } from 'lucide-react'
 import { AppShell } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/button'
 import { formatRupiah, cn } from '@/lib/utils'
 import { useMe } from '@/features/auth/api/auth-api'
-import { useCustomers } from '@/features/customers/api/customers-api'
+import { useCustomers, useCreateCustomer } from '@/features/customers/api/customers-api'
 import { useProducts } from '@/features/products/api/products-api'
 import { useOrder, useCreateOrder, useUpdateOrder } from '../api/orders-api'
 import type { OrderStatus, PaymentStatus } from '@/lib/status'
@@ -15,6 +15,12 @@ interface DraftItem {
   product_name: string
   price: number
   quantity: number
+}
+
+interface OrderTemplate {
+  id: string
+  name: string
+  items: DraftItem[]
 }
 
 const PAYMENT_OPTIONS: { value: PaymentStatus; label: string }[] = [
@@ -29,6 +35,8 @@ const STATUS_OPTIONS: { value: OrderStatus; label: string }[] = [
   { value: 'completed', label: 'Selesai' },
 ]
 
+const MAX_TEMPLATES = 8
+
 export function OrderFormPage() {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -38,7 +46,10 @@ export function OrderFormPage() {
 
   const { data: user } = useMe()
   const { data: existing } = useOrder(orderId)
+  const reorderId = !isEdit && searchParams.get('reorder') ? Number(searchParams.get('reorder')) : undefined
+  const { data: reorderSource } = useOrder(reorderId)
   const { data: customersData } = useCustomers()
+  const createCustomer = useCreateCustomer()
   const createOrder = useCreateOrder()
   const updateOrder = useUpdateOrder(orderId ?? 0)
 
@@ -50,45 +61,131 @@ export function OrderFormPage() {
   const [status, setStatus] = useState<OrderStatus>('new')
   const [notes, setNotes] = useState('')
   const [productSearch, setProductSearch] = useState('')
-  const [hydrated, setHydrated] = useState(false)
+  const [hydratedFromExisting, setHydratedFromExisting] = useState(false)
+  const [hydratedFromReorder, setHydratedFromReorder] = useState(false)
+
+  const [showQuickCustomer, setShowQuickCustomer] = useState(false)
+  const [quickCustomerName, setQuickCustomerName] = useState('')
+  const [quickCustomerPhone, setQuickCustomerPhone] = useState('')
+
+  const [templates, setTemplates] = useState<OrderTemplate[]>([])
+  const [templateName, setTemplateName] = useState('')
   const [error, setError] = useState<string | null>(null)
 
-  // Hydrate from an existing order once when editing.
-  if (isEdit && existing && !hydrated) {
+  const templateStorageKey = useMemo(
+    () => `opsmate:order-templates:${user?.business?.id ?? 'default'}`,
+    [user?.business?.id],
+  )
+
+  useEffect(() => {
+    if (!isEdit || !existing || hydratedFromExisting) {
+      return
+    }
+
     setCustomerId(existing.customer?.id ?? '')
     setItems(
-      (existing.items ?? []).map((i) => ({
-        product_id: i.product_id ?? 0,
-        product_name: i.product_name,
-        price: i.price,
-        quantity: i.quantity,
-      })),
+      (existing.items ?? [])
+        .filter((item) => item.product_id != null)
+        .map((item) => ({
+          product_id: item.product_id ?? 0,
+          product_name: item.product_name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
     )
     setPaymentStatus(existing.payment_status)
     setStatus(existing.status)
     setNotes(existing.notes ?? '')
-    setHydrated(true)
-  }
+    setHydratedFromExisting(true)
+  }, [existing, hydratedFromExisting, isEdit])
+
+  useEffect(() => {
+    if (isEdit || !reorderSource || hydratedFromReorder) {
+      return
+    }
+
+    setCustomerId((prev) => prev || reorderSource.customer?.id || '')
+    setItems(
+      (reorderSource.items ?? [])
+        .filter((item) => item.product_id != null)
+        .map((item) => ({
+          product_id: item.product_id ?? 0,
+          product_name: item.product_name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+    )
+    setStatus('new')
+    setPaymentStatus('unpaid')
+    setNotes(reorderSource.notes ?? '')
+    setHydratedFromReorder(true)
+  }, [hydratedFromReorder, isEdit, reorderSource])
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(templateStorageKey)
+      if (!raw) {
+        setTemplates([])
+        return
+      }
+
+      const parsed = JSON.parse(raw)
+      if (!Array.isArray(parsed)) {
+        setTemplates([])
+        return
+      }
+
+      const safeTemplates = parsed
+        .filter((template) => template && typeof template.name === 'string' && Array.isArray(template.items))
+        .map((template) => ({
+          id: String(template.id ?? `${Date.now()}`),
+          name: template.name,
+          items: template.items
+            .filter((item: DraftItem) => item?.product_id && item?.quantity > 0)
+            .map((item: DraftItem) => ({
+              product_id: item.product_id,
+              product_name: item.product_name,
+              price: item.price,
+              quantity: item.quantity,
+            })),
+        }))
+        .filter((template) => template.items.length > 0)
+        .slice(0, MAX_TEMPLATES)
+
+      setTemplates(safeTemplates)
+    } catch {
+      setTemplates([])
+    }
+  }, [templateStorageKey])
+
+  useEffect(() => {
+    localStorage.setItem(templateStorageKey, JSON.stringify(templates))
+  }, [templateStorageKey, templates])
 
   const { data: productsData } = useProducts({ search: productSearch || undefined })
   const customers = customersData?.data ?? []
   const products = productsData?.data ?? []
+  const quickProducts = products.slice(0, 6)
 
   const total = useMemo(
-    () => items.reduce((sum, i) => sum + i.price * i.quantity, 0),
+    () => items.reduce((sum, item) => sum + item.price * item.quantity, 0),
     [items],
   )
 
   const addProduct = (productId: number) => {
-    const product = products.find((p) => p.id === productId)
-    if (!product) return
+    const product = products.find((entry) => entry.id === productId)
+    if (!product) {
+      return
+    }
+
     setItems((prev) => {
-      const existing = prev.find((i) => i.product_id === productId)
-      if (existing) {
-        return prev.map((i) =>
-          i.product_id === productId ? { ...i, quantity: i.quantity + 1 } : i,
+      const existingItem = prev.find((item) => item.product_id === productId)
+      if (existingItem) {
+        return prev.map((item) =>
+          item.product_id === productId ? { ...item, quantity: item.quantity + 1 } : item,
         )
       }
+
       return [
         ...prev,
         {
@@ -104,36 +201,108 @@ export function OrderFormPage() {
   const setQuantity = (productId: number, delta: number) => {
     setItems((prev) =>
       prev
-        .map((i) =>
-          i.product_id === productId ? { ...i, quantity: i.quantity + delta } : i,
+        .map((item) =>
+          item.product_id === productId ? { ...item, quantity: item.quantity + delta } : item,
         )
-        .filter((i) => i.quantity > 0),
+        .filter((item) => item.quantity > 0),
     )
   }
 
   const removeItem = (productId: number) => {
-    setItems((prev) => prev.filter((i) => i.product_id !== productId))
+    setItems((prev) => prev.filter((item) => item.product_id !== productId))
+  }
+
+  const saveTemplate = () => {
+    const name = templateName.trim()
+    if (!name) {
+      setError('Isi nama template dulu.')
+      return
+    }
+
+    if (items.length === 0) {
+      setError('Pilih produk dulu sebelum simpan template.')
+      return
+    }
+
+    setTemplates((prev) => {
+      const next = [
+        {
+          id:
+            typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+              ? crypto.randomUUID()
+              : `${Date.now()}`,
+          name,
+          items: items.map((item) => ({ ...item })),
+        },
+        ...prev.filter((template) => template.name.toLowerCase() !== name.toLowerCase()),
+      ]
+      return next.slice(0, MAX_TEMPLATES)
+    })
+
+    setTemplateName('')
+    setError(null)
+  }
+
+  const applyTemplate = (template: OrderTemplate) => {
+    setItems(template.items.map((item) => ({ ...item })))
+    setError(null)
+  }
+
+  const removeTemplate = (templateId: string) => {
+    setTemplates((prev) => prev.filter((template) => template.id !== templateId))
+  }
+
+  const onCreateInlineCustomer = async () => {
+    const name = quickCustomerName.trim()
+    if (!name) {
+      setError('Nama customer cepat wajib diisi.')
+      return
+    }
+
+    setError(null)
+    const customer = await createCustomer.mutateAsync({
+      name,
+      phone: quickCustomerPhone.trim() || null,
+      customer_type: 'new',
+    })
+
+    setCustomerId(customer.id)
+    setQuickCustomerName('')
+    setQuickCustomerPhone('')
+    setShowQuickCustomer(false)
   }
 
   const onSubmit = async () => {
     setError(null)
-    if (!customerId) return setError('Pilih customer dulu.')
-    if (items.length === 0) return setError('Tambah minimal 1 produk.')
+
+    if (!customerId) {
+      setError('Pilih customer dulu.')
+      return
+    }
+
+    if (items.length === 0) {
+      setError('Tambah minimal 1 produk.')
+      return
+    }
 
     const payload = {
       customer_id: Number(customerId),
       status,
       payment_status: paymentStatus,
       notes: notes || null,
-      items: items.map((i) => ({
-        product_id: i.product_id,
-        quantity: i.quantity,
-        price: i.price,
+      items: items.map((item) => ({
+        product_id: item.product_id,
+        quantity: item.quantity,
+        price: item.price,
       })),
     }
 
-    if (isEdit) await updateOrder.mutateAsync(payload)
-    else await createOrder.mutateAsync(payload)
+    if (isEdit) {
+      await updateOrder.mutateAsync(payload)
+    } else {
+      await createOrder.mutateAsync(payload)
+    }
+
     navigate('/orders')
   }
 
@@ -141,7 +310,7 @@ export function OrderFormPage() {
 
   return (
     <AppShell
-      greeting={isEdit ? 'Edit Order' : 'Tambah Order Baru'}
+      greeting={isEdit ? 'Edit Order' : 'Quick Order'}
       businessName={user?.business?.name ?? 'OpsMate AI'}
       userName={user?.name ?? 'Owner'}
       onLogout={() => navigate('/login')}
@@ -157,30 +326,127 @@ export function OrderFormPage() {
         <Section title="Pelanggan">
           <select
             value={customerId}
-            onChange={(e) => setCustomerId(e.target.value ? Number(e.target.value) : '')}
+            onChange={(event) => setCustomerId(event.target.value ? Number(event.target.value) : '')}
             className="auth-input"
           >
             <option value="">Pilih pelanggan...</option>
-            {customers.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
+            {customers.map((customer) => (
+              <option key={customer.id} value={customer.id}>
+                {customer.name}
               </option>
             ))}
           </select>
-          <button
-            onClick={() => navigate('/customers/new')}
-            className="mt-2 text-sm font-semibold text-primary-700"
-          >
-            + Tambah Customer Baru
-          </button>
+
+          {!showQuickCustomer ? (
+            <button
+              onClick={() => setShowQuickCustomer(true)}
+              className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-primary-700"
+            >
+              <UserPlus className="h-4 w-4" /> Customer baru cepat
+            </button>
+          ) : (
+            <div className="mt-3 rounded-[12px] border border-neutral-200 p-3">
+              <p className="text-sm font-semibold text-neutral-900">Tambah customer cepat</p>
+              <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                <input
+                  value={quickCustomerName}
+                  onChange={(event) => setQuickCustomerName(event.target.value)}
+                  placeholder="Nama customer"
+                  className="auth-input"
+                />
+                <input
+                  value={quickCustomerPhone}
+                  onChange={(event) => setQuickCustomerPhone(event.target.value)}
+                  placeholder="No. WhatsApp"
+                  className="auth-input"
+                />
+              </div>
+              <div className="mt-2 flex gap-2">
+                <Button
+                  size="sm"
+                  onClick={onCreateInlineCustomer}
+                  disabled={createCustomer.isPending}
+                >
+                  {createCustomer.isPending ? 'Menyimpan...' : 'Simpan & Pilih'}
+                </Button>
+                <Button size="sm" variant="secondary" onClick={() => setShowQuickCustomer(false)}>
+                  Batal
+                </Button>
+              </div>
+            </div>
+          )}
+        </Section>
+
+        <Section title="Template Order">
+          <div className="flex gap-2">
+            <input
+              value={templateName}
+              onChange={(event) => setTemplateName(event.target.value)}
+              placeholder="Contoh: Paket Meeting 10 Pax"
+              className="auth-input"
+            />
+            <Button size="sm" onClick={saveTemplate} disabled={items.length === 0}>
+              Simpan
+            </Button>
+          </div>
+
+          {templates.length === 0 ? (
+            <p className="mt-2 text-sm text-neutral-500">
+              Belum ada template. Pilih item order lalu simpan agar bisa dipakai ulang.
+            </p>
+          ) : (
+            <div className="mt-3 space-y-2">
+              {templates.map((template) => (
+                <div
+                  key={template.id}
+                  className="flex items-center justify-between gap-2 rounded-[12px] border border-neutral-200 px-3 py-2"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-neutral-900">{template.name}</p>
+                    <p className="text-xs text-neutral-500">{template.items.length} item</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="secondary" onClick={() => applyTemplate(template)}>
+                      <RotateCcw className="h-4 w-4" />
+                      Gunakan
+                    </Button>
+                    <button
+                      onClick={() => removeTemplate(template.id)}
+                      className="rounded-[10px] border border-neutral-200 p-2 text-neutral-400 hover:text-danger"
+                      aria-label={`Hapus template ${template.name}`}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </Section>
 
         <Section title="Produk">
-          <div className="relative">
+          {quickProducts.length > 0 && (
+            <div>
+              <p className="mb-2 text-xs font-semibold text-neutral-500">Pilih cepat</p>
+              <div className="flex flex-wrap gap-2">
+                {quickProducts.map((product) => (
+                  <button
+                    key={product.id}
+                    onClick={() => addProduct(product.id)}
+                    className="rounded-full border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-700 hover:border-primary-400 hover:text-primary-700"
+                  >
+                    {product.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="relative mt-3">
             <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-neutral-400" />
             <input
               value={productSearch}
-              onChange={(e) => setProductSearch(e.target.value)}
+              onChange={(event) => setProductSearch(event.target.value)}
               placeholder="Cari atau pilih produk..."
               className="auth-input pl-9"
             />
@@ -188,17 +454,17 @@ export function OrderFormPage() {
 
           {productSearch && (
             <div className="mt-2 flex flex-col gap-1">
-              {products.slice(0, 5).map((p) => (
+              {products.slice(0, 5).map((product) => (
                 <button
-                  key={p.id}
+                  key={product.id}
                   onClick={() => {
-                    addProduct(p.id)
+                    addProduct(product.id)
                     setProductSearch('')
                   }}
                   className="flex items-center justify-between rounded-[12px] border border-neutral-200 px-3 py-2 text-left text-sm hover:bg-neutral-50"
                 >
-                  <span>{p.name}</span>
-                  <span className="text-neutral-500">{formatRupiah(p.price)}</span>
+                  <span>{product.name}</span>
+                  <span className="text-neutral-500">{formatRupiah(product.price)}</span>
                 </button>
               ))}
             </div>
@@ -211,9 +477,7 @@ export function OrderFormPage() {
                 className="flex items-center gap-2 rounded-[12px] border border-neutral-200 p-3"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-neutral-900">
-                    {item.product_name}
-                  </p>
+                  <p className="truncate text-sm font-semibold text-neutral-900">{item.product_name}</p>
                   <p className="text-xs text-neutral-500">{formatRupiah(item.price)}</p>
                 </div>
                 <Stepper
@@ -237,11 +501,7 @@ export function OrderFormPage() {
         </Section>
 
         <Section title="Status Pembayaran">
-          <Segmented
-            options={PAYMENT_OPTIONS}
-            value={paymentStatus}
-            onChange={setPaymentStatus}
-          />
+          <Segmented options={PAYMENT_OPTIONS} value={paymentStatus} onChange={setPaymentStatus} />
         </Section>
 
         <Section title="Status Order">
@@ -251,7 +511,7 @@ export function OrderFormPage() {
         <Section title="Catatan (Opsional)">
           <textarea
             value={notes}
-            onChange={(e) => setNotes(e.target.value)}
+            onChange={(event) => setNotes(event.target.value)}
             rows={3}
             placeholder="Catatan untuk order ini..."
             className="auth-input h-auto py-2"
@@ -322,22 +582,22 @@ function Segmented<T extends string>({
 }: {
   options: { value: T; label: string }[]
   value: T
-  onChange: (v: T) => void
+  onChange: (value: T) => void
 }) {
   return (
     <div className="flex gap-2">
-      {options.map((o) => (
+      {options.map((option) => (
         <button
-          key={o.value}
-          onClick={() => onChange(o.value)}
+          key={option.value}
+          onClick={() => onChange(option.value)}
           className={cn(
             'flex-1 rounded-[12px] border px-3 py-2 text-sm font-medium',
-            value === o.value
+            value === option.value
               ? 'border-primary-700 bg-primary-50 text-primary-700'
               : 'border-neutral-200 text-neutral-500',
           )}
         >
-          {o.label}
+          {option.label}
         </button>
       ))}
     </div>

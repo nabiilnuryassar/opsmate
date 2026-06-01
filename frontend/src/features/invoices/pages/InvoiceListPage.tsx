@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { LoadingState } from '@/components/shared/LoadingState'
 import { useMe } from '@/features/auth/api/auth-api'
 import { InvoiceCard } from '../components/InvoiceCard'
 import { useInvoices } from '../api/invoices-api'
@@ -53,7 +54,7 @@ export function InvoiceListPage() {
         </div>
 
         {isLoading ? (
-          <p className="text-sm text-neutral-500">Memuat...</p>
+          <LoadingState message="Memuat invoice..." />
         ) : isEmpty ? (
           <EmptyState
             title="Belum ada invoice"

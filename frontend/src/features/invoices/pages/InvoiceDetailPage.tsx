@@ -5,6 +5,7 @@ import { AppShell } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/shared/StatusBadge'
+import { LoadingState } from '@/components/shared/LoadingState'
 import { formatRupiah, cn } from '@/lib/utils'
 import { useMe } from '@/features/auth/api/auth-api'
 import {
@@ -51,7 +52,7 @@ export function InvoiceDetailPage() {
       </button>
 
       {isLoading || !invoice ? (
-        <p className="text-sm text-neutral-500">Memuat...</p>
+        <LoadingState message="Memuat detail invoice..." />
       ) : (
         <div className="flex flex-col gap-4">
           <Card>

@@ -1,19 +1,21 @@
-import { describe, it, expect, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderWithProviders } from '@/test/render'
 import { OrderFormPage } from './OrderFormPage'
 
 const createMutate = vi.fn().mockResolvedValue({ id: 1 })
+const createCustomerMutate = vi.fn().mockResolvedValue({ id: 11, name: 'Budi', phone: '0812' })
 
 vi.mock('@/features/auth/api/auth-api', () => ({
-  useMe: () => ({ data: { name: 'Rina', business: { name: 'Rina Catering' } } }),
+  useMe: () => ({ data: { name: 'Rina', business: { id: 1, name: 'Rina Catering' } } }),
 }))
 
 vi.mock('@/features/customers/api/customers-api', () => ({
   useCustomers: () => ({
     data: { data: [{ id: 7, name: 'Sinta', phone: '0811', customer_type: 'new' }] },
   }),
+  useCreateCustomer: () => ({ mutateAsync: createCustomerMutate, isPending: false }),
 }))
 
 vi.mock('@/features/products/api/products-api', () => ({
@@ -23,25 +25,27 @@ vi.mock('@/features/products/api/products-api', () => ({
 }))
 
 vi.mock('../api/orders-api', () => ({
-  useOrder: () => ({ data: undefined }),
+  useOrder: (_id?: number) => ({ data: undefined }),
   useCreateOrder: () => ({ mutateAsync: createMutate, isPending: false }),
   useUpdateOrder: () => ({ mutateAsync: vi.fn(), isPending: false }),
 }))
 
 describe('OrderFormPage', () => {
+  beforeEach(() => {
+    createMutate.mockClear()
+    createCustomerMutate.mockClear()
+    localStorage.clear()
+  })
+
   it('updates the total as products are added', async () => {
     const user = userEvent.setup()
     renderWithProviders(<OrderFormPage />)
 
     expect(screen.getByText(/Rp.?0$/)).toBeInTheDocument()
 
-    await user.type(screen.getByPlaceholderText('Cari atau pilih produk...'), 'Kopi')
-    await user.click(await screen.findByText('Kopi Susu'))
-
-    // One unit added -> item price and total both show the unit price.
+    await user.click(screen.getByRole('button', { name: 'Kopi Susu' }))
     await waitFor(() => expect(screen.getAllByText(/Rp.?25\.000/).length).toBeGreaterThanOrEqual(2))
 
-    // Increment quantity -> total doubles.
     await user.click(screen.getByLabelText('Tambah'))
     await waitFor(() => expect(screen.getByText(/Rp.?50\.000/)).toBeInTheDocument())
   })
@@ -53,5 +57,27 @@ describe('OrderFormPage', () => {
     await user.click(screen.getByRole('button', { name: 'Simpan Order' }))
     expect(await screen.findByText('Pilih customer dulu.')).toBeInTheDocument()
     expect(createMutate).not.toHaveBeenCalled()
+  })
+
+  it('creates inline customer and sets it as selected', async () => {
+    const user = userEvent.setup()
+    renderWithProviders(<OrderFormPage />)
+
+    await user.click(screen.getByRole('button', { name: /Customer baru cepat/i }))
+    await user.type(screen.getByPlaceholderText('Nama customer'), 'Budi')
+    await user.type(screen.getByPlaceholderText('No. WhatsApp'), '0812')
+    await user.click(screen.getByRole('button', { name: 'Simpan & Pilih' }))
+
+    await waitFor(() =>
+      expect(createCustomerMutate).toHaveBeenCalledWith({
+        name: 'Budi',
+        phone: '0812',
+        customer_type: 'new',
+      }),
+    )
+
+    await waitFor(() =>
+      expect(screen.queryByPlaceholderText('Nama customer')).not.toBeInTheDocument(),
+    )
   })
 })

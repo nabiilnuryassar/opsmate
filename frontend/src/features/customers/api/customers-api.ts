@@ -7,6 +7,7 @@ import type {
   CustomerPayload,
   Paginated,
 } from '../types'
+import type { Order } from '@/features/orders/types'
 
 export function useCustomers(filters: CustomerFilters = {}) {
   return useQuery({
@@ -26,6 +27,17 @@ export function useCustomer(id: number | undefined) {
     queryFn: async () => {
       const { data } = await api.get<{ data: Customer }>(`/customers/${id}`)
       return data.data
+    },
+    enabled: Boolean(id),
+  })
+}
+
+export function useCustomerOrders(id: number | undefined) {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.customers, id, 'orders'],
+    queryFn: async () => {
+      const { data } = await api.get<Paginated<Order>>(`/customers/${id}/orders`)
+      return data
     },
     enabled: Boolean(id),
   })

@@ -1,3 +1,4 @@
+import Markdown from 'react-markdown'
 import { cn } from '@/lib/utils'
 import { AIDataCard } from './AIDataCard'
 import type { AIMessage } from '../api/ai-api'
@@ -14,11 +15,28 @@ export function ChatBubble({ message }: { message: AIMessage }) {
     <div className={cn('flex flex-col', isUser ? 'items-end' : 'items-start')}>
       <div
         className={cn(
-          'max-w-[85%] rounded-[16px] px-4 py-2.5 text-sm whitespace-pre-line',
+          'max-w-[85%] rounded-[16px] px-4 py-2.5 text-sm',
           isUser ? 'bg-primary-700 text-white' : 'bg-ai-50 text-neutral-900',
         )}
       >
-        {message.content}
+        {isUser ? (
+          <span className="whitespace-pre-line">{message.content}</span>
+        ) : (
+          <Markdown
+            components={{
+              p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+              strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+              ul: ({ children }) => <ul className="mb-2 list-disc pl-4 last:mb-0">{children}</ul>,
+              ol: ({ children }) => <ol className="mb-2 list-decimal pl-4 last:mb-0">{children}</ol>,
+              li: ({ children }) => <li className="mb-0.5">{children}</li>,
+              h1: ({ children }) => <p className="mb-1 font-bold">{children}</p>,
+              h2: ({ children }) => <p className="mb-1 font-bold">{children}</p>,
+              h3: ({ children }) => <p className="mb-1 font-semibold">{children}</p>,
+            }}
+          >
+            {message.content}
+          </Markdown>
+        )}
       </div>
 
       {!isUser && message.unpaid.length > 0 && (

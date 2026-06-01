@@ -4,9 +4,11 @@ import { Search, Plus } from 'lucide-react'
 import { AppShell } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { LoadingState } from '@/components/shared/LoadingState'
 import { useMe } from '@/features/auth/api/auth-api'
 import { OrderCard } from '../components/OrderCard'
 import { useOrders } from '../api/orders-api'
+import { OrderQuickActions } from '../components/OrderQuickActions'
 import type { OrderFilters } from '../types'
 import { cn } from '@/lib/utils'
 
@@ -79,7 +81,7 @@ export function OrderListPage() {
         </div>
 
         {isLoading ? (
-          <p className="text-sm text-neutral-500">Memuat...</p>
+          <LoadingState message="Memuat order..." />
         ) : isEmpty ? (
           <EmptyState
             title="Belum ada order"
@@ -92,7 +94,12 @@ export function OrderListPage() {
         ) : (
           <div className="flex flex-col gap-2">
             {orders.map((o) => (
-              <OrderCard key={o.id} order={o} onClick={() => navigate(`/orders/${o.id}`)} />
+              <OrderCard
+                key={o.id}
+                order={o}
+                onClick={() => navigate(`/orders/${o.id}`)}
+                actions={<OrderQuickActions order={o} />}
+              />
             ))}
           </div>
         )}

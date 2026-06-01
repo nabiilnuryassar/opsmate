@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { LoadingState } from '@/components/shared/LoadingState'
 import { useMe } from '@/features/auth/api/auth-api'
 import { ReminderCard } from '../components/ReminderCard'
 import { FollowUpMessageModal } from '../components/FollowUpMessageModal'
@@ -55,7 +56,7 @@ export function ReminderListPage() {
         <h1 className="text-xl font-bold text-neutral-900">Perlu Ditindaklanjuti</h1>
 
         {isLoading ? (
-          <p className="text-sm text-neutral-500">Memuat...</p>
+          <LoadingState message="Memuat reminder..." />
         ) : list.length === 0 ? (
           <EmptyState
             title="Tidak ada yang perlu ditindaklanjuti"

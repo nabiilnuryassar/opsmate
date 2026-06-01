@@ -1,4 +1,5 @@
 import { Badge } from '@/components/shared/StatusBadge'
+import { LoadingState } from '@/components/shared/LoadingState'
 import type { BadgeTone } from '@/lib/status'
 import { useStockMovements } from '../api/products-api'
 import type { StockMovementType } from '../api/products-api'
@@ -22,7 +23,7 @@ function dateLabel(iso: string | null): string {
 export function StockMovementHistory({ productId }: { productId: number }) {
   const { data: movements, isLoading } = useStockMovements(productId)
 
-  if (isLoading) return <p className="text-sm text-neutral-500">Memuat...</p>
+  if (isLoading) return <LoadingState message="Memuat pergerakan stok..." className="py-2" />
   if (!movements || movements.length === 0) {
     return <p className="text-sm text-neutral-400">Belum ada pergerakan stok.</p>
   }

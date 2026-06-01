@@ -4,6 +4,7 @@ import { Search, Plus } from 'lucide-react'
 import { AppShell } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { LoadingState } from '@/components/shared/LoadingState'
 import { useMe } from '@/features/auth/api/auth-api'
 import { CustomerCard } from '../components/CustomerCard'
 import { useCustomers } from '../api/customers-api'
@@ -76,7 +77,7 @@ export function CustomerListPage() {
         </div>
 
         {isLoading ? (
-          <p className="text-sm text-neutral-500">Memuat...</p>
+          <LoadingState message="Memuat customer..." />
         ) : isEmpty ? (
           <EmptyState
             title="Belum ada customer"

@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { AppShell } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
+import { LoadingState } from '@/components/shared/LoadingState'
 import { useMe } from '@/features/auth/api/auth-api'
 import { BUSINESS_CATEGORIES } from '@/features/business/types'
 import { useBusiness, useUpdateBusiness } from '@/features/business/api/business-api'
@@ -60,7 +61,7 @@ export function BusinessProfilePage() {
       <Card>
         <CardTitle>Profil Bisnis</CardTitle>
         {isLoading ? (
-          <p className="mt-4 text-sm text-neutral-500">Memuat...</p>
+          <LoadingState message="Memuat profil bisnis..." className="py-4" />
         ) : (
           <form onSubmit={onSubmit} className="mt-4 flex flex-col gap-4" noValidate>
             <Field label="Nama Bisnis" error={errors.name?.message}>

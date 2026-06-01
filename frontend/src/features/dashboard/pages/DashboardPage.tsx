@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Wallet, PackageX, Clock, UserPlus } from 'lucide-react'
 import { AppShell } from '@/components/layout/AppShell'
+import { LoadingState } from '@/components/shared/LoadingState'
 import { formatRupiah } from '@/lib/utils'
 import { useLogout } from '@/features/auth/api/auth-api'
 import { useDashboard } from '../api/dashboard-api'
@@ -9,6 +10,7 @@ import { MetricCard } from '../components/MetricCard'
 import { QuickActionGrid } from '../components/QuickActionGrid'
 import { RecentOrders } from '../components/RecentOrders'
 import { LowStockPanel } from '../components/LowStockPanel'
+import { UnpaidOrdersPanel } from '../components/UnpaidOrdersPanel'
 import { trendTone, buildSummary } from '../summary'
 import { useAISummary } from '@/features/ai/api/ai-api'
 
@@ -28,7 +30,7 @@ export function DashboardPage() {
       onLogout={() => logout.mutate(undefined, { onSettled: () => navigate('/login') })}
     >
       {isLoading || !m ? (
-        <p className="text-sm text-neutral-500">Memuat dashboard...</p>
+        <LoadingState message="Memuat dashboard..." />
       ) : (
         <div className="flex flex-col gap-5">
           <AISummaryCard summary={summary} onAskAI={() => navigate('/ai')} />
@@ -63,6 +65,8 @@ export function DashboardPage() {
               iconClass="bg-info-soft text-info"
             />
           </div>
+
+          <UnpaidOrdersPanel orders={data.unpaid_orders ?? []} />
 
           <div className="grid gap-5 lg:grid-cols-3">
             <div className="lg:col-span-2">

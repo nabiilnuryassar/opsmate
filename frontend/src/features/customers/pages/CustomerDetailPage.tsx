@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, Pencil, Trash2, MessageCircle } from 'lucide-react'
+import { ArrowLeft, Pencil, Trash2, MessageCircle, RotateCcw } from 'lucide-react'
 import { AppShell } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/button'
 import { Card, CardTitle } from '@/components/ui/card'
 import { CustomerTypeBadge } from '@/components/shared/StatusBadge'
+import { LoadingState } from '@/components/shared/LoadingState'
 import { useMe } from '@/features/auth/api/auth-api'
 import { AIInsightCard } from '@/features/ai/components/AIInsightCard'
 import { FollowUpMessageModal } from '@/features/reminders/components/FollowUpMessageModal'
 import { generateFollowUp } from '@/features/ai/api/ai-api'
-import { useCustomer, useDeleteCustomer } from '../api/customers-api'
+import { useCustomer, useCustomerOrders, useDeleteCustomer } from '../api/customers-api'
 
 export function CustomerDetailPage() {
   const navigate = useNavigate()
@@ -17,10 +18,12 @@ export function CustomerDetailPage() {
   const customerId = id ? Number(id) : undefined
   const { data: user } = useMe()
   const { data: customer, isLoading } = useCustomer(customerId)
+  const { data: ordersData } = useCustomerOrders(customerId)
   const deleteCustomer = useDeleteCustomer()
   const [fuOpen, setFuOpen] = useState(false)
   const [fuMessage, setFuMessage] = useState('')
   const [fuLoading, setFuLoading] = useState(false)
+  const recentOrders = ordersData?.data ?? []
 
   const onFollowUp = async () => {
     if (!customerId) return
@@ -56,7 +59,7 @@ export function CustomerDetailPage() {
       </button>
 
       {isLoading || !customer ? (
-        <p className="text-sm text-neutral-500">Memuat...</p>
+        <LoadingState message="Memuat detail customer..." />
       ) : (
         <div className="flex flex-col gap-4">
           <Card>
@@ -112,10 +115,49 @@ export function CustomerDetailPage() {
           )}
 
           <Card>
-            <CardTitle>Riwayat Order</CardTitle>
-            <p className="mt-2 text-sm text-neutral-500">
-              Riwayat order akan tampil di sini setelah customer memiliki order.
-            </p>
+            <div className="flex items-center justify-between">
+              <CardTitle>Riwayat Order</CardTitle>
+              {recentOrders.length > 0 && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => navigate(`/orders/new?customer=${customer.id}&reorder=${recentOrders[0].id}`)}
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  Ulangi Order Terakhir
+                </Button>
+              )}
+            </div>
+
+            {recentOrders.length === 0 ? (
+              <p className="mt-2 text-sm text-neutral-500">
+                Riwayat order akan tampil di sini setelah customer memiliki order.
+              </p>
+            ) : (
+              <div className="mt-3 space-y-2">
+                {recentOrders.slice(0, 5).map((order) => (
+                  <div
+                    key={order.id}
+                    className="flex items-center justify-between gap-2 rounded-[12px] border border-neutral-200 px-3 py-2"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-neutral-900">{order.order_number}</p>
+                      <p className="text-xs text-neutral-500">{order.order_date ?? '-'}</p>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() =>
+                        navigate(`/orders/new?customer=${customer.id}&reorder=${order.id}`)
+                      }
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                      Pesan Lagi
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
           </Card>
 
           <div className="flex gap-2">

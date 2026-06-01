@@ -4,6 +4,7 @@ import { Search, Plus } from 'lucide-react'
 import { AppShell } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/button'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { LoadingState } from '@/components/shared/LoadingState'
 import { useMe } from '@/features/auth/api/auth-api'
 import { ProductCard } from '../components/ProductCard'
 import { useProducts } from '../api/products-api'
@@ -78,7 +79,7 @@ export function ProductListPage() {
         </div>
 
         {isLoading ? (
-          <p className="text-sm text-neutral-500">Memuat...</p>
+          <LoadingState message="Memuat produk..." />
         ) : isEmpty ? (
           <EmptyState
             title="Belum ada produk"

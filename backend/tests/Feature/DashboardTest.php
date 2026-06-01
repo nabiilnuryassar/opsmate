@@ -104,7 +104,9 @@ class DashboardTest extends TestCase
         $response->assertJsonCount(1, 'recent_orders')
             ->assertJsonPath('metrics.low_stock_count', 1)
             ->assertJsonCount(1, 'low_stock_products')
-            ->assertJsonPath('low_stock_products.0.name', 'Brownies');
+            ->assertJsonPath('low_stock_products.0.name', 'Brownies')
+            ->assertJsonCount(1, 'unpaid_orders')
+            ->assertJsonPath('unpaid_orders.0.customer.name', $customer->name);
     }
 
     public function test_revenue_excludes_refunded_orders(): void

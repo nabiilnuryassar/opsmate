@@ -23,6 +23,7 @@ export interface DashboardSummary {
   metrics: DashboardMetrics
   recent_orders: Order[]
   reminders: unknown[]
+  unpaid_orders: Order[]
   low_stock_products: Product[]
 }
 

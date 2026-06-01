@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Sparkles } from 'lucide-react'
+
 
 interface AuthLayoutProps {
   title: string
@@ -14,9 +14,7 @@ export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProp
     <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4 py-10">
       <div className="w-full max-w-[400px]">
         <div className="mb-6 flex flex-col items-center text-center">
-          <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-[16px] bg-primary-700 text-white">
-            <Sparkles className="h-6 w-6" />
-          </span>
+          <img src="/logo.png" alt="OpsMate AI" className="mb-3 h-12 w-12 rounded-[16px]" />
           <h1 className="text-2xl font-bold text-neutral-900">{title}</h1>
           {subtitle && <p className="mt-1 text-sm text-neutral-500">{subtitle}</p>}
         </div>

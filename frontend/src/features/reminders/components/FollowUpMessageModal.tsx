@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { X, Copy, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { LoadingState } from '@/components/shared/LoadingState'
 
 interface FollowUpMessageModalProps {
   open: boolean
@@ -49,7 +50,7 @@ export function FollowUpMessageModal({
         </div>
 
         {loading ? (
-          <p className="py-6 text-center text-sm text-neutral-500">Menyiapkan pesan...</p>
+          <LoadingState message="Menyiapkan pesan..." className="py-4" />
         ) : (
           <>
             <textarea
