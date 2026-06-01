@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tambah Order Baru - OpsMate AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffdbce",
+                        "surface-tint": "#006a63",
+                        "on-surface-variant": "#3e4947",
+                        "on-error": "#ffffff",
+                        "app-bg": "#F8FAFC",
+                        "surface-variant": "#e0e3e1",
+                        "surface-container-high": "#e5e9e7",
+                        "warning": "#F59E0B",
+                        "on-primary-fixed": "#00201d",
+                        "tertiary": "#7f4025",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#8a4cfc",
+                        "on-error-container": "#93000a",
+                        "cta-main": "#0D9488",
+                        "error": "#ba1a1a",
+                        "background": "#f7faf8",
+                        "danger": "#EF4444",
+                        "surface-container-highest": "#e0e3e1",
+                        "surface-bright": "#f7faf8",
+                        "on-background": "#181c1c",
+                        "on-secondary-fixed-variant": "#5a00c6",
+                        "secondary-fixed": "#eaddff",
+                        "surface-container-low": "#f1f4f3",
+                        "inverse-on-surface": "#eef1f0",
+                        "inverse-surface": "#2d3130",
+                        "ai-soft": "#EDE9FE",
+                        "primary": "#005c55",
+                        "on-secondary-fixed": "#25005a",
+                        "success": "#10B981",
+                        "secondary": "#712ae2",
+                        "tertiary-fixed-dim": "#ffb598",
+                        "tertiary-container": "#9c573a",
+                        "on-primary": "#ffffff",
+                        "surface": "#f7faf8",
+                        "primary-fixed-dim": "#80d5cb",
+                        "border": "#E2E8F0",
+                        "on-tertiary-container": "#ffe5db",
+                        "error-container": "#ffdad6",
+                        "text-main": "#0F172A",
+                        "on-secondary": "#ffffff",
+                        "info": "#3B82F6",
+                        "on-primary-container": "#a3faef",
+                        "outline": "#6e7977",
+                        "on-secondary-container": "#fffbff",
+                        "surface-container": "#ebefed",
+                        "on-tertiary-fixed-variant": "#72361b",
+                        "secondary-fixed-dim": "#d2bbff",
+                        "on-surface": "#181c1c",
+                        "on-primary-fixed-variant": "#00504a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#370e00",
+                        "primary-container": "#0f766e",
+                        "primary-soft": "#CCFBF1",
+                        "text-secondary": "#64748B",
+                        "primary-fixed": "#9cf2e8",
+                        "surface-dim": "#d7dbd9",
+                        "inverse-primary": "#80d5cb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "padding-desktop": "24px",
+                        "padding-mobile": "16px",
+                        "gutter": "16px",
+                        "stack-lg": "24px",
+                        "stack-md": "16px",
+                        "sidebar-width": "260px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display": ["Plus Jakarta Sans"],
+                        "caption": ["Inter"],
+                        "display-mobile": ["Plus Jakarta Sans"],
+                        "h3": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "h1": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "caption": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "display-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "h3": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "h2": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "h1": ["28px", {"lineHeight": "36px", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .segmented-control input:checked + label {
+            background-color: #0D9488;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .glass-footer {
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-app-bg font-body text-text-main antialiased pb-32">
+<!-- Header (Task-Focused - Shell Suppressed) -->
+<header class="sticky top-0 z-40 bg-surface px-padding-mobile py-4 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors active:scale-95">
+<span class="material-symbols-outlined text-text-main">arrow_back</span>
+</button>
+<h1 class="font-display-mobile text-display-mobile">Tambah Order Baru</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-ai-soft text-secondary active:scale-90 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</button>
+</header>
+<main class="px-padding-mobile py-padding-mobile space-y-6">
+<!-- Section 1: Customer -->
+<section class="space-y-3">
+<label class="font-h3 text-h3 flex items-center gap-2">
+<span class="material-symbols-outlined text-cta-main">person</span>
+                Pelanggan
+            </label>
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-border">
+<div class="relative group">
+<select class="w-full bg-surface-container-low border-border rounded-xl px-4 py-3 appearance-none focus:ring-2 focus:ring-cta-main focus:border-cta-main transition-all">
+<option>Pilih Pelanggan Existing</option>
+<option>Budi Santoso</option>
+<option>Siti Aminah</option>
+<option>Rudi Hermawan</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-secondary">expand_more</span>
+</div>
+<div class="mt-3 flex items-center justify-center">
+<button class="text-cta-main font-semibold flex items-center gap-1 py-2 px-4 rounded-lg hover:bg-primary-soft transition-colors">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+                        Tambah Baru
+                    </button>
+</div>
+</div>
+</section>
+<!-- Section 2: Items/Products -->
+<section class="space-y-3">
+<label class="font-h3 text-h3 flex items-center gap-2">
+<span class="material-symbols-outlined text-cta-main">inventory_2</span>
+                Produk
+            </label>
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-border space-y-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-low border-border rounded-xl focus:ring-2 focus:ring-cta-main focus:border-cta-main" placeholder="Cari atau pilih produk..." type="text"/>
+</div>
+<!-- Active Item (Single Column Layout) -->
+<div class="flex flex-col gap-4 p-4 bg-primary-soft/30 rounded-xl border border-primary-soft">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-semibold text-text-main">Kopi Susu Gula Aren</p>
+<p class="text-caption font-caption text-text-secondary">SKU: Kopi-001</p>
+</div>
+<button class="text-danger p-1">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<div class="flex items-center justify-between gap-4">
+<div class="flex items-center border border-border bg-white rounded-lg overflow-hidden">
+<button class="px-3 py-2 hover:bg-surface-container transition-colors active:bg-surface-container-high" onclick="this.nextElementSibling.stepDown()">
+<span class="material-symbols-outlined text-sm">remove</span>
+</button>
+<input class="w-12 text-center border-none focus:ring-0 font-semibold" id="qty-input" min="1" type="number" value="1"/>
+<button class="px-3 py-2 hover:bg-surface-container transition-colors active:bg-surface-container-high" onclick="this.previousElementSibling.stepUp()">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<div class="text-right">
+<p class="text-caption font-caption text-text-secondary">Harga Unit</p>
+<p class="font-semibold text-cta-main">Rp25.000</p>
+</div>
+</div>
+</div>
+<button class="w-full py-3 border-2 border-dashed border-border text-text-secondary rounded-xl flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">add</span>
+                    Tambah Produk Lain
+                </button>
+</div>
+</section>
+<!-- Section 3 & 4: Statuses (Segmented Controls) -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Payment Status -->
+<section class="space-y-3">
+<label class="font-h3 text-h3 flex items-center gap-2">
+<span class="material-symbols-outlined text-cta-main">payments</span>
+                    Status Pembayaran
+                </label>
+<div class="segmented-control flex bg-surface-container-low p-1.5 rounded-xl border border-border gap-1">
+<input checked="" class="hidden" id="pay1" name="payment" type="radio"/>
+<label class="flex-1 text-center py-2.5 px-2 rounded-lg text-body-sm font-medium transition-all cursor-pointer" for="pay1">Belum Bayar</label>
+<input class="hidden" id="pay2" name="payment" type="radio"/>
+<label class="flex-1 text-center py-2.5 px-2 rounded-lg text-body-sm font-medium transition-all cursor-pointer" for="pay2">DP</label>
+<input class="hidden" id="pay3" name="payment" type="radio"/>
+<label class="flex-1 text-center py-2.5 px-2 rounded-lg text-body-sm font-medium transition-all cursor-pointer" for="pay3">Lunas</label>
+</div>
+</section>
+<!-- Order Status -->
+<section class="space-y-3">
+<label class="font-h3 text-h3 flex items-center gap-2">
+<span class="material-symbols-outlined text-cta-main">assignment_turned_in</span>
+                    Status Order
+                </label>
+<div class="segmented-control flex bg-surface-container-low p-1.5 rounded-xl border border-border gap-1">
+<input checked="" class="hidden" id="ord1" name="order_status" type="radio"/>
+<label class="flex-1 text-center py-2.5 px-2 rounded-lg text-body-sm font-medium transition-all cursor-pointer" for="ord1">Baru</label>
+<input class="hidden" id="ord2" name="order_status" type="radio"/>
+<label class="flex-1 text-center py-2.5 px-2 rounded-lg text-body-sm font-medium transition-all cursor-pointer" for="ord2">Diproses</label>
+<input class="hidden" id="ord3" name="order_status" type="radio"/>
+<label class="flex-1 text-center py-2.5 px-2 rounded-lg text-body-sm font-medium transition-all cursor-pointer" for="ord3">Selesai</label>
+</div>
+</section>
+</div>
+<!-- Section 5: Notes -->
+<section class="space-y-3">
+<label class="font-h3 text-h3 flex items-center gap-2">
+<span class="material-symbols-outlined text-cta-main">notes</span>
+                Catatan (Opsional)
+            </label>
+<textarea class="w-full h-24 bg-surface-container-lowest border-border rounded-xl p-4 focus:ring-2 focus:ring-cta-main focus:border-cta-main" placeholder="Contoh: Kirim sebelum jam 3 sore, request packaging kardus..."></textarea>
+</section>
+</main>
+<!-- Sticky Footer -->
+<footer class="fixed bottom-0 left-0 w-full glass-footer border-t border-border px-padding-mobile py-4 z-50">
+<div class="max-w-md mx-auto flex items-center justify-between gap-4">
+<div class="flex flex-col">
+<span class="text-caption font-caption text-text-secondary">Total Tagihan</span>
+<span class="font-h2 text-h2 text-text-main">Rp250.000</span>
+</div>
+<button class="bg-cta-main text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 shadow-lg active:scale-95 transition-all">
+                Simpan Order
+                <span class="material-symbols-outlined text-lg">check_circle</span>
+</button>
+</div>
+</footer>
+<!-- AI Overlay (Atmospheric Interaction) -->
+<div class="fixed top-20 right-4 max-w-[200px] bg-white p-3 rounded-2xl shadow-xl border border-ai-soft hidden transition-all duration-500 opacity-0 transform translate-y-4" id="ai-hint">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-sm">auto_awesome</span>
+<p class="text-[11px] font-medium leading-tight">Gunakan perintah suara untuk input lebih cepat!</p>
+</div>
+</div>
+<script>
+        // Micro-interaction for AI hint
+        window.onload = () => {
+            setTimeout(() => {
+                const hint = document.getElementById('ai-hint');
+                hint.classList.remove('hidden');
+                setTimeout(() => {
+                    hint.classList.remove('opacity-0', 'translate-y-4');
+                }, 100);
+            }, 1500);
+
+            // Hide after 5s
+            setTimeout(() => {
+                const hint = document.getElementById('ai-hint');
+                hint.classList.add('opacity-0', 'translate-y-4');
+                setTimeout(() => hint.classList.add('hidden'), 500);
+            }, 6500);
+        };
+    </script>
+</body></html>

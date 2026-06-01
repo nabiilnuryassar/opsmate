@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OpsMate AI - Rina Catering Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffdbce",
+                        "surface-tint": "#006a63",
+                        "on-surface-variant": "#3e4947",
+                        "on-error": "#ffffff",
+                        "app-bg": "#F8FAFC",
+                        "surface-variant": "#e0e3e1",
+                        "surface-container-high": "#e5e9e7",
+                        "warning": "#F59E0B",
+                        "on-primary-fixed": "#00201d",
+                        "tertiary": "#7f4025",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#8a4cfc",
+                        "on-error-container": "#93000a",
+                        "cta-main": "#0D9488",
+                        "error": "#ba1a1a",
+                        "background": "#f7faf8",
+                        "danger": "#EF4444",
+                        "surface-container-highest": "#e0e3e1",
+                        "surface-bright": "#f7faf8",
+                        "on-background": "#181c1c",
+                        "on-secondary-fixed-variant": "#5a00c6",
+                        "secondary-fixed": "#eaddff",
+                        "surface-container-low": "#f1f4f3",
+                        "inverse-on-surface": "#eef1f0",
+                        "inverse-surface": "#2d3130",
+                        "ai-soft": "#EDE9FE",
+                        "primary": "#005c55",
+                        "on-secondary-fixed": "#25005a",
+                        "success": "#10B981",
+                        "secondary": "#712ae2",
+                        "tertiary-fixed-dim": "#ffb598",
+                        "tertiary-container": "#9c573a",
+                        "on-primary": "#ffffff",
+                        "surface": "#f7faf8",
+                        "primary-fixed-dim": "#80d5cb",
+                        "border": "#E2E8F0",
+                        "on-tertiary-container": "#ffe5db",
+                        "error-container": "#ffdad6",
+                        "text-main": "#0F172A",
+                        "on-secondary": "#ffffff",
+                        "info": "#3B82F6",
+                        "on-primary-container": "#a3faef",
+                        "outline": "#6e7977",
+                        "on-secondary-container": "#fffbff",
+                        "surface-container": "#ebefed",
+                        "on-tertiary-fixed-variant": "#72361b",
+                        "secondary-fixed-dim": "#d2bbff",
+                        "on-surface": "#181c1c",
+                        "on-primary-fixed-variant": "#00504a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#370e00",
+                        "primary-container": "#0f766e",
+                        "primary-soft": "#CCFBF1",
+                        "text-secondary": "#64748B",
+                        "primary-fixed": "#9cf2e8",
+                        "surface-dim": "#d7dbd9",
+                        "inverse-primary": "#80d5cb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "padding-desktop": "24px",
+                        "padding-mobile": "16px",
+                        "gutter": "16px",
+                        "stack-lg": "24px",
+                        "stack-md": "16px",
+                        "sidebar-width": "260px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display": ["Plus Jakarta Sans"],
+                        "caption": ["Inter"],
+                        "body": ["Inter"],
+                        "h1": ["Plus Jakarta Sans"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "h3": ["Plus Jakarta Sans"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ai-glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(237, 233, 254, 0.4) 100%);
+            border: 1px solid rgba(124, 58, 237, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-app-bg text-text-main font-body selection:bg-primary-soft">
+<div class="flex min-h-screen">
+<!-- SideNavBar (Desktop Shell) -->
+<aside class="hidden md:flex flex-col w-sidebar-width h-screen sticky top-0 bg-surface-container-low border-r border-border">
+<div class="p-6">
+<h1 class="font-display text-h3 font-bold text-cta-main">OpsMate AI</h1>
+<p class="text-text-secondary text-caption">SME Manager</p>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<!-- Dashboard Active -->
+<a class="flex items-center gap-3 bg-primary-soft text-primary font-semibold border-l-4 border-cta-main px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body text-body-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-text-secondary px-4 py-3 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-body text-body-sm">Orders</span>
+</a>
+<a class="flex items-center gap-3 text-text-secondary px-4 py-3 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body text-body-sm">Customers</span>
+</a>
+<a class="flex items-center gap-3 text-text-secondary px-4 py-3 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body text-body-sm">Products</span>
+</a>
+<a class="flex items-center gap-3 text-text-secondary px-4 py-3 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-body text-body-sm">Invoices</span>
+</a>
+<a class="flex items-center gap-3 text-text-secondary px-4 py-3 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+<span class="font-body text-body-sm">Reminders</span>
+</a>
+<a class="flex items-center gap-3 text-text-secondary px-4 py-3 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body text-body-sm">Reports</span>
+</a>
+<a class="flex items-center gap-3 text-text-secondary px-4 py-3 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-body text-body-sm">AI Assistant</span>
+</a>
+<a class="flex items-center gap-3 text-text-secondary px-4 py-3 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body text-body-sm">Settings</span>
+</a>
+</nav>
+<div class="p-4 mt-auto">
+<button class="w-full flex items-center justify-center gap-2 bg-cta-main text-white py-3 rounded-xl font-semibold shadow-sm hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+                    New Entry
+                </button>
+<div class="mt-4 pt-4 border-t border-border">
+<a class="flex items-center gap-3 text-text-secondary px-4 py-2 hover:text-danger transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body text-body-sm">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-w-0 bg-app-bg pb-20 md:pb-0">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-padding-mobile md:px-padding-desktop w-full h-16 bg-surface shadow-sm sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-text-main">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<div>
+<h2 class="font-display text-h2 font-bold text-text-main leading-tight">Rina Catering</h2>
+<p class="text-text-secondary text-caption hidden md:block">Pagi, Bu Rina</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex bg-surface-container items-center px-4 py-2 rounded-full border border-border w-80">
+<span class="material-symbols-outlined text-text-secondary text-[20px]" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-full ml-2" placeholder="Cari order atau produk..." type="text"/>
+</div>
+<button class="relative p-2 text-text-secondary hover:bg-surface-container rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-danger rounded-full border-2 border-white"></span>
+</button>
+<div class="flex items-center gap-3 ml-2 border-l border-border pl-4">
+<div class="text-right hidden sm:block">
+<p class="text-body-sm font-semibold">Bu Rina</p>
+<p class="text-caption text-text-secondary">Owner</p>
+</div>
+<img alt="User Profile" class="w-10 h-10 rounded-full border-2 border-primary-soft object-cover" data-alt="A professional headshot of a middle-aged Indonesian woman with a warm, friendly smile. She is wearing a clean, modern apron in a professional kitchen setting. The lighting is soft and natural, emphasizing her approachability and expert authority. The overall aesthetic is bright, clean, and modern corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJsb0zG0vMNPWerNnWZS32UzbILP8ExCF7kdSvUHWrgRzOEkq8k_qNjAl9kqEKZuV5SvjhjSUYwRyUoldPW0LWymlZ4Xd4ltbew_n6-7P8wrg5neyIgr0lh1wXhlsZBiadQy54bmggew0Z161M8XSrr0n5V1McZ4YiJZ3J25we6YkcOk_4I2oASSgJ82aRgCCOIzTem6nrd3CGzN_pPa3o4-s86UQxV5qRLoCgVf8km1yoNbSndEjRLgoReoGa_cudPFRIJyoZAHPh"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-padding-mobile md:p-padding-desktop space-y-stack-lg max-w-[1400px] mx-auto w-full">
+<!-- Greeting Mobile -->
+<div class="md:hidden">
+<h2 class="font-display text-display-mobile">Pagi, Bu Rina</h2>
+<p class="text-text-secondary text-body-sm">Cek status operasional katering hari ini.</p>
+</div>
+<!-- AI Summary Card (Bento Style) -->
+<section class="ai-glass-card p-6 md:p-8 rounded-2xl shadow-[0_4px_24px_rgba(124,58,237,0.08)] relative overflow-hidden group">
+<!-- Subtle AI Glow Background -->
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-secondary-container opacity-10 rounded-full blur-3xl pointer-events-none group-hover:opacity-20 transition-opacity"></div>
+<div class="flex flex-col md:flex-row gap-6 items-start relative z-10">
+<div class="bg-secondary p-4 rounded-2xl text-white shadow-lg shadow-secondary/20">
+<span class="material-symbols-outlined text-[32px]" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="flex-1 space-y-4">
+<div class="flex items-center gap-2">
+<span class="bg-secondary/10 text-secondary font-semibold text-caption px-3 py-1 rounded-full border border-secondary/20 uppercase tracking-wider">AI Insight</span>
+<span class="text-text-secondary text-caption">• Baru saja diperbarui</span>
+</div>
+<h3 class="font-display text-h1 text-text-main leading-snug">
+                                Hari ini ada <span class="text-cta-main">12 order</span> dengan estimasi omzet <span class="text-cta-main">Rp1.450.000</span>. Ada 3 order belum dibayar dengan total Rp650.000. Produk <span class="font-bold underline decoration-secondary/30 decoration-2">Paket Hemat</span> paling laku hari ini, dan stok <span class="text-danger font-bold">Brownies Coklat</span> hampir habis.
+                            </h3>
+<div class="flex flex-wrap gap-3 pt-2">
+<button class="flex items-center gap-2 bg-secondary text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-secondary/25 hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[20px]" data-icon="psychology">psychology</span>
+                                    Tanya AI
+                                </button>
+<button class="flex items-center gap-2 bg-white border border-border text-text-main px-6 py-3 rounded-xl font-semibold hover:bg-surface-container transition-colors active:scale-95">
+                                    Lihat Detail
+                                </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-border hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-xl bg-primary-soft text-cta-main group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+</div>
+<span class="text-success text-caption font-bold bg-success/10 px-2 py-1 rounded">+12%</span>
+</div>
+<p class="text-text-secondary text-caption font-medium">Order Hari Ini</p>
+<h4 class="font-display text-h1 mt-1">12</h4>
+</div>
+<!-- Card 2 -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-border hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-xl bg-primary-soft text-cta-main group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+</div>
+<span class="text-success text-caption font-bold bg-success/10 px-2 py-1 rounded">+8%</span>
+</div>
+<p class="text-text-secondary text-caption font-medium">Omzet Hari Ini</p>
+<h4 class="font-display text-h1 mt-1 text-h2 md:text-h1">Rp1.450k</h4>
+</div>
+<!-- Card 3 -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-border hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-xl bg-error-container text-danger group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+</div>
+<span class="text-danger text-caption font-bold bg-danger/10 px-2 py-1 rounded">Penting</span>
+</div>
+<p class="text-text-secondary text-caption font-medium">Belum Bayar</p>
+<h4 class="font-display text-h1 mt-1 text-danger">Rp650k</h4>
+</div>
+<!-- Card 4 -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-border hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-xl bg-info/10 text-info group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+</div>
+</div>
+<p class="text-text-secondary text-caption font-medium">Diproses</p>
+<h4 class="font-display text-h1 mt-1">5</h4>
+</div>
+</div>
+<!-- Split Layout Bottom -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg items-start">
+<!-- Left: Recent Orders (2/3) -->
+<div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-border flex flex-col h-full overflow-hidden">
+<div class="p-6 border-b border-border flex justify-between items-center">
+<h3 class="font-display text-h3 font-bold">Order Terbaru</h3>
+<button class="text-cta-main text-body-sm font-semibold hover:underline">Lihat Semua</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-text-secondary text-caption uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4 font-semibold">Pelanggan</th>
+<th class="px-6 py-4 font-semibold">ID Order</th>
+<th class="px-6 py-4 font-semibold">Total</th>
+<th class="px-6 py-4 font-semibold">Pembayaran</th>
+<th class="px-6 py-4 font-semibold">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border">
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-soft text-cta-main flex items-center justify-center font-bold text-caption">AS</div>
+<span class="font-semibold text-body-sm">Andi Saputra</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm">#RC-1092</td>
+<td class="px-6 py-4 text-body-sm font-semibold">Rp125.000</td>
+<td class="px-6 py-4">
+<span class="bg-success/10 text-success text-[12px] px-2.5 py-1 rounded-full font-bold">Lunas</span>
+</td>
+<td class="px-6 py-4">
+<span class="bg-info/10 text-info text-[12px] px-2.5 py-1 rounded-full font-bold">Baru</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-ai-soft text-secondary flex items-center justify-center font-bold text-caption">LM</div>
+<span class="font-semibold text-body-sm">Lina Marlina</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm">#RC-1091</td>
+<td class="px-6 py-4 text-body-sm font-semibold">Rp450.000</td>
+<td class="px-6 py-4">
+<span class="bg-danger/10 text-danger text-[12px] px-2.5 py-1 rounded-full font-bold">Belum Bayar</span>
+</td>
+<td class="px-6 py-4">
+<span class="bg-warning/10 text-warning text-[12px] px-2.5 py-1 rounded-full font-bold">Diproses</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-text-secondary flex items-center justify-center font-bold text-caption">BW</div>
+<span class="font-semibold text-body-sm">Bambang W.</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm">#RC-1090</td>
+<td class="px-6 py-4 text-body-sm font-semibold">Rp275.000</td>
+<td class="px-6 py-4">
+<span class="bg-success/10 text-success text-[12px] px-2.5 py-1 rounded-full font-bold">Lunas</span>
+</td>
+<td class="px-6 py-4">
+<span class="bg-success/10 text-success text-[12px] px-2.5 py-1 rounded-full font-bold">Selesai</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-soft text-cta-main flex items-center justify-center font-bold text-caption">DF</div>
+<span class="font-semibold text-body-sm">Diana Fitri</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-sm">#RC-1089</td>
+<td class="px-6 py-4 text-body-sm font-semibold">Rp200.000</td>
+<td class="px-6 py-4">
+<span class="bg-danger/10 text-danger text-[12px] px-2.5 py-1 rounded-full font-bold">Belum Bayar</span>
+</td>
+<td class="px-6 py-4">
+<span class="bg-info/10 text-info text-[12px] px-2.5 py-1 rounded-full font-bold">Baru</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right: Reminders & Stock (1/3) -->
+<div class="space-y-stack-lg">
+<!-- Reminders -->
+<div class="bg-white rounded-2xl shadow-sm border border-border p-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-warning" data-icon="event_note">event_note</span>
+<h3 class="font-display text-h3 font-bold">Perlu Ditindaklanjuti</h3>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4 p-4 rounded-xl bg-surface-container-low border border-border hover:border-warning/30 transition-colors">
+<div class="text-warning font-bold text-h2">12</div>
+<div>
+<p class="font-semibold text-body-sm">Kirim Tagihan</p>
+<p class="text-caption text-text-secondary">Pelanggan belum bayar &gt; 24 jam</p>
+</div>
+</div>
+<div class="flex gap-4 p-4 rounded-xl bg-surface-container-low border border-border hover:border-cta-main/30 transition-colors">
+<div class="text-cta-main font-bold text-h2">03</div>
+<div>
+<p class="font-semibold text-body-sm">Konfirmasi Pickup</p>
+<p class="text-caption text-text-secondary">Order siap dikirim sore ini</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Low Stock Alert -->
+<div class="bg-white rounded-2xl shadow-sm border border-border p-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-danger" data-icon="inventory">inventory</span>
+<h3 class="font-display text-h3 font-bold">Stok Menipis</h3>
+</div>
+<div class="p-4 rounded-xl bg-danger/5 border border-danger/10 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-surface-variant">
+<img alt="Brownies Coklat" class="w-full h-full object-cover" data-alt="A macro photograph of rich, fudgy chocolate brownies stacked neatly on a rustic wooden platter. The brownies have a crackly top and are dusted lightly with powdered sugar. The lighting is warm and cinematic, highlighting the decadent texture of the chocolate. The background is a clean, modern kitchen surface in a light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAml2i0AHl9RYWQvi6AhGy9XD-Yab0f8v-7YmLfjnyZnXx4Z_2kAVTtEHa0enZw4cY3gLlmB6sUBCaSmqbOfyDyP6MZeQFNn-LA1l_nnm_NGTWBGVWnfv7SLfDGBL4DyLZj_m6ELag_PfXVl0AKtBOsFjdiX-RaeGNzmIDxZdH3W6i4-HiQpCGM3UXZIaBF_4q4YW7lMUWMJ53FkUBzQReR5YwuiJ12RPXATMsXsLZ_NCFFNcgPeC-tEYY6cEnD4r6Ahbk73sGqXeMx"/>
+</div>
+<div>
+<p class="font-bold text-body-sm">Brownies Coklat</p>
+<p class="text-caption text-danger">Tersisa 2 Box</p>
+</div>
+</div>
+<button class="p-2 text-cta-main hover:bg-primary-soft rounded-lg transition-colors">
+<span class="material-symbols-outlined" data-icon="add_box">add_box</span>
+</button>
+</div>
+<button class="w-full mt-4 py-3 border-2 border-dashed border-border rounded-xl text-text-secondary text-body-sm font-semibold hover:border-cta-main hover:text-cta-main transition-all">
+                                Atur Inventori
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface shadow-[0_-4px_12px_rgba(0,0,0,0.06)] rounded-t-xl border-t border-border/50">
+<button class="flex flex-col items-center justify-center text-cta-main font-bold active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-caption text-caption">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-text-secondary active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="font-caption text-caption">Orders</span>
+</button>
+<button class="flex items-center justify-center w-12 h-12 bg-cta-main text-white rounded-full -mt-10 shadow-lg shadow-cta-main/30 border-4 border-app-bg active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+</button>
+<button class="flex flex-col items-center justify-center text-text-secondary active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+<span class="font-caption text-caption">Reminder</span>
+</button>
+<button class="flex flex-col items-center justify-center text-text-secondary active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-secondary" data-icon="psychology">psychology</span>
+<span class="font-caption text-caption">AI</span>
+</button>
+</nav>
+<!-- Micro-interaction Scripts -->
+<script>
+        // Simple notification toast simulation
+        function showNotification(message) {
+            console.log('Notification:', message);
+        }
+
+        // Add smooth hover effect to cards
+        document.querySelectorAll('.bg-white').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('translate-y-[-2px]');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('translate-y-[-2px]');
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,68 @@
+# ============================================================
+# OpsMate AI — root .gitignore
+# Jaring pengaman lintas-folder. backend/ & frontend/ punya
+# .gitignore sendiri; ini menutup celah di level repo.
+# ============================================================
+
+# --- Rahasia & environment (JANGAN PERNAH commit) ---
+.env
+.env.*
+!.env.example
+!*/.env.example
+# Template produksi boleh dibagikan HANYA jika berisi placeholder.
+# Default: ignore demi keamanan. Hapus baris ini jika sengaja
+# ingin commit template (pastikan tanpa kredensial asli).
+backend/.env.production
+
+# --- TLS / kunci / kredensial (KRITIS) ---
+docker/certs/*
+!docker/certs/.gitkeep
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+auth.json
+
+# --- Dependencies (safety net; tiap sub-app sudah ignore juga) ---
+node_modules/
+vendor/
+
+# --- Build output ---
+dist/
+dist-ssr/
+build/
+/backend/public/build/
+/backend/public/hot
+
+# --- Database lokal & dump ---
+*.sqlite
+*.sqlite3
+*.sql
+*.dump
+
+# --- Log & cache ---
+*.log
+.phpunit.result.cache
+.phpunit.cache/
+/backend/storage/*.key
+
+# --- OS & editor ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# --- Tooling / harness artifacts (bukan bagian aplikasi) ---
+.codex/
+.cursor/
+.agents/
+.stitch/
+.mcp.json
+skills-lock.json
+_ide_helper.php
+*.local

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>OpsMate AI Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#ffdbce",
+                    "surface-tint": "#006a63",
+                    "on-surface-variant": "#3e4947",
+                    "on-error": "#ffffff",
+                    "app-bg": "#F8FAFC",
+                    "surface-variant": "#e0e3e1",
+                    "surface-container-high": "#e5e9e7",
+                    "warning": "#F59E0B",
+                    "on-primary-fixed": "#00201d",
+                    "tertiary": "#7f4025",
+                    "on-tertiary": "#ffffff",
+                    "secondary-container": "#8a4cfc",
+                    "on-error-container": "#93000a",
+                    "cta-main": "#0D9488",
+                    "error": "#ba1a1a",
+                    "background": "#f7faf8",
+                    "danger": "#EF4444",
+                    "surface-container-highest": "#e0e3e1",
+                    "surface-bright": "#f7faf8",
+                    "on-background": "#181c1c",
+                    "on-secondary-fixed-variant": "#5a00c6",
+                    "secondary-fixed": "#eaddff",
+                    "surface-container-low": "#f1f4f3",
+                    "inverse-on-surface": "#eef1f0",
+                    "inverse-surface": "#2d3130",
+                    "ai-soft": "#EDE9FE",
+                    "primary": "#005c55",
+                    "on-secondary-fixed": "#25005a",
+                    "success": "#10B981",
+                    "secondary": "#712ae2",
+                    "tertiary-fixed-dim": "#ffb598",
+                    "tertiary-container": "#9c573a",
+                    "on-primary": "#ffffff",
+                    "surface": "#f7faf8",
+                    "primary-fixed-dim": "#80d5cb",
+                    "border": "#E2E8F0",
+                    "on-tertiary-container": "#ffe5db",
+                    "error-container": "#ffdad6",
+                    "text-main": "#0F172A",
+                    "on-secondary": "#ffffff",
+                    "info": "#3B82F6",
+                    "on-primary-container": "#a3faef",
+                    "outline": "#6e7977",
+                    "on-secondary-container": "#fffbff",
+                    "surface-container": "#ebefed",
+                    "on-tertiary-fixed-variant": "#72361b",
+                    "secondary-fixed-dim": "#d2bbff",
+                    "on-surface": "#181c1c",
+                    "on-primary-fixed-variant": "#00504a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed": "#370e00",
+                    "primary-container": "#0f766e",
+                    "primary-soft": "#CCFBF1",
+                    "text-secondary": "#64748B",
+                    "primary-fixed": "#9cf2e8",
+                    "surface-dim": "#d7dbd9",
+                    "inverse-primary": "#80d5cb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "padding-desktop": "24px",
+                    "padding-mobile": "16px",
+                    "gutter": "16px",
+                    "stack-lg": "24px",
+                    "stack-md": "16px",
+                    "sidebar-width": "260px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "display": ["Plus Jakarta Sans"],
+                    "caption": ["Inter"],
+                    "display-mobile": ["Plus Jakarta Sans"],
+                    "h3": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "h2": ["Plus Jakarta Sans"],
+                    "h1": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "caption": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "display-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "h3": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "h2": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "h1": ["28px", {"lineHeight": "36px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .ai-gradient {
+            background: linear-gradient(135deg, #CCFBF1 0%, #EDE9FE 100%);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .active-nav-icon { font-variation-settings: 'FILL' 1; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-app-bg font-body text-text-main min-h-screen pb-32">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center px-padding-mobile md:px-padding-desktop w-full h-16 bg-surface dark:bg-inverse-surface sticky top-0 z-40 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cta-main flex items-center justify-center text-white font-bold overflow-hidden border-2 border-white shadow-sm">
+<img alt="Rina" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJbDuCZR1yhTUUARS8rMevJUnWWS3cnbWafHEYoqcBRbDASbcibz2OCjqfUG_o3vWRUe7k_b44NrSfupbkluWcHe68dILXsI91PyGNJKMPAbv_ATpARRCTlH19cMIorxOqfyycgDNE-ZWNGd6BejntZn2XFgGKe2frR2Xtd1maSEj-A5zfcpSU6vgMt-YMij5W32lf60xRB794MngxTZO-B45jJnrAWfkW0tmCQ1Rqwth4LmXt8ImQsK80xao6_dtCa2OGgh9XqYYW"/>
+</div>
+<div>
+<p class="font-body-sm text-caption text-text-secondary">Pagi, Bu Rina</p>
+<h1 class="font-display-mobile text-h3 leading-tight">OpsMate AI</h1>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 rounded-xl flex items-center justify-center bg-surface-container-low text-text-main active:scale-95 transition-transform">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<main class="px-padding-mobile mt-6 space-y-stack-lg">
+<!-- AI Summary Card (Hero) -->
+<section class="ai-gradient p-6 rounded-3xl border border-white/50 shadow-sm relative overflow-hidden">
+<div class="absolute -right-10 -top-10 w-32 h-32 bg-secondary/10 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-3">
+<div class="bg-secondary text-white p-1 rounded-lg">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<span class="font-display text-h3 text-secondary">Ringkasan Pintar</span>
+</div>
+<p class="font-body text-text-main leading-relaxed mb-6">
+                    Hari ini ada <span class="font-bold text-secondary">12 order</span> dengan estimasi omzet <span class="font-bold">Rp1.450.000</span>. Ada 3 order belum dibayar yang perlu dicek ya, Bu.
+                </p>
+<button class="bg-secondary text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 shadow-lg shadow-secondary/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">psychology</span>
+                    Tanya AI
+                </button>
+</div>
+</section>
+<!-- Quick Actions (Horizontal Scroll) -->
+<section>
+<div class="flex overflow-x-auto no-scrollbar gap-3 pb-2">
+<button class="flex-shrink-0 flex items-center gap-2 bg-surface-container-lowest border border-border px-4 py-3 rounded-2xl shadow-sm active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-cta-main">add_shopping_cart</span>
+<span class="font-body-sm font-semibold">Tambah Order</span>
+</button>
+<button class="flex-shrink-0 flex items-center gap-2 bg-surface-container-lowest border border-border px-4 py-3 rounded-2xl shadow-sm active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-cta-main">person_add</span>
+<span class="font-body-sm font-semibold">Tambah Customer</span>
+</button>
+<button class="flex-shrink-0 flex items-center gap-2 bg-surface-container-lowest border border-border px-4 py-3 rounded-2xl shadow-sm active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-cta-main">description</span>
+<span class="font-body-sm font-semibold">Buat Invoice</span>
+</button>
+</div>
+</section>
+<!-- Metrics Grid -->
+<section class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-2xl border border-border">
+<div class="flex justify-between items-start mb-2">
+<div class="w-8 h-8 rounded-lg bg-primary-soft text-cta-main flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+</div>
+<span class="text-success font-bold text-caption">+12%</span>
+</div>
+<p class="text-text-secondary text-caption mb-1">Pendapatan</p>
+<h3 class="font-display text-h3 text-text-main">Rp4.2M</h3>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl border border-border">
+<div class="flex justify-between items-start mb-2">
+<div class="w-8 h-8 rounded-lg bg-secondary-container/10 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<span class="text-danger font-bold text-caption">-2%</span>
+</div>
+<p class="text-text-secondary text-caption mb-1">Stok Rendah</p>
+<h3 class="font-display text-h3 text-text-main">18 Item</h3>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl border border-border">
+<div class="flex justify-between items-start mb-2">
+<div class="w-8 h-8 rounded-lg bg-orange-100 text-warning flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">pending_actions</span>
+</div>
+</div>
+<p class="text-text-secondary text-caption mb-1">Pending</p>
+<h3 class="font-display text-h3 text-text-main">5 Order</h3>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl border border-border">
+<div class="flex justify-between items-start mb-2">
+<div class="w-8 h-8 rounded-lg bg-blue-100 text-info flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">group</span>
+</div>
+</div>
+<p class="text-text-secondary text-caption mb-1">Customer Baru</p>
+<h3 class="font-display text-h3 text-text-main">24</h3>
+</div>
+</section>
+<!-- Reminders Section -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h2 class="font-display-mobile text-h2 text-text-main">Perlu Ditindaklanjuti</h2>
+<button class="text-cta-main font-semibold text-caption">Lihat Semua</button>
+</div>
+<div class="space-y-3">
+<div class="flex gap-4 p-4 bg-surface-container-lowest rounded-2xl border border-border shadow-sm">
+<div class="w-12 h-12 flex-shrink-0 bg-red-50 text-danger rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined">priority_high</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<h4 class="font-bold text-body-sm">Kirim Tagihan: UD Jaya</h4>
+<span class="text-[10px] bg-red-100 text-danger px-2 py-0.5 rounded-full font-bold">URGENT</span>
+</div>
+<p class="text-text-secondary text-caption">Jatuh tempo hari ini pukul 16:00</p>
+</div>
+</div>
+<div class="flex gap-4 p-4 bg-surface-container-lowest rounded-2xl border border-border shadow-sm">
+<div class="w-12 h-12 flex-shrink-0 bg-orange-50 text-warning rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined">inventory</span>
+</div>
+<div class="flex-grow">
+<h4 class="font-bold text-body-sm">Restock: Beras Premium 5kg</h4>
+<p class="text-text-secondary text-caption">Sisa 3 karung di gudang pusat</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Orders -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h2 class="font-display-mobile text-h2 text-text-main">Order Terbaru</h2>
+<button class="text-cta-main font-semibold text-caption">Lihat Laporan</button>
+</div>
+<div class="space-y-3">
+<div class="bg-surface-container-lowest p-4 rounded-2xl border border-border flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-soft flex items-center justify-center text-cta-main font-bold">AS</div>
+<div>
+<h4 class="font-bold text-body-sm">Andi Saputra</h4>
+<p class="text-text-secondary text-caption">3 item • 10:45 WIB</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-body-sm text-text-main">Rp125.000</p>
+<span class="text-[10px] bg-green-100 text-success px-2 py-0.5 rounded-full font-bold uppercase">LUNAS</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl border border-border flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/10 flex items-center justify-center text-secondary font-bold">MR</div>
+<div>
+<h4 class="font-bold text-body-sm">Maya Rosita</h4>
+<p class="text-text-secondary text-caption">1 item • 09:12 WIB</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-body-sm text-text-main">Rp450.000</p>
+<span class="text-[10px] bg-orange-100 text-warning px-2 py-0.5 rounded-full font-bold uppercase">PENDING</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl border border-border flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img alt="Budi" class="w-10 h-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUBeWqt6xR84KXT6ljuozd_hXduoMVGx7y1wi5f0RT-RGy97Eptk5G-S8WOKKIcSZm2Tu6aP6xruSHT415hPXwhqjCDxTHlIqm88a5pAXd8XWgCtqax2cME-Pz3Z0twaK3-qG677RloxlWZ5KlwJqHa6zw0PkpCwQp92fDdD4dlwFaXYb2lK11lChuWKYoYHZPvbT8N3wrQGcsqJf5YCcOQ9LnyyGIhvB3j5T3Mu47gmbXgzGvPbWiiEhoNKjc5IrR--rK8Wg7cRNt"/>
+<div>
+<h4 class="font-bold text-body-sm">Budi Kurniawan</h4>
+<p class="text-text-secondary text-caption">5 item • 08:30 WIB</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-body-sm text-text-main">Rp890.000</p>
+<span class="text-[10px] bg-green-100 text-success px-2 py-0.5 rounded-full font-bold uppercase">LUNAS</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-inverse-surface shadow-[0_-4px_12px_rgba(0,0,0,0.06)] rounded-t-3xl">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center text-cta-main font-bold active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined active-nav-icon">home</span>
+<span class="font-caption text-caption">Home</span>
+</a>
+<!-- Orders -->
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-caption text-caption">Orders</span>
+</a>
+<!-- Add (Priority Action) -->
+<div class="-mt-12">
+<button class="w-14 h-14 bg-cta-main text-white rounded-full flex items-center justify-center shadow-lg shadow-cta-main/30 active:scale-95 transition-transform ring-4 ring-app-bg">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+</div>
+<!-- Reminder -->
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-caption text-caption">Reminder</span>
+</a>
+<!-- AI -->
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-caption text-caption">AI</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interactions
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('click', function(e) {
+                // Subtle ripple-like effect or logging
+                console.log('Action performed on: ' + (this.innerText || 'Icon Button'));
+            });
+        });
+
+        // Add scroll shadow to header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-md');
+            } else {
+                header.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body></html>

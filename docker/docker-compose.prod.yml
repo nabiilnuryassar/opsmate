@@ -1,0 +1,102 @@
+# Production stack for OpsMate AI.
+# Secrets come from backend/.env (copy backend/.env.production and fill it in).
+# Run from the repo root:  docker compose -f docker/docker-compose.prod.yml up -d --build
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-opsmate}
+      POSTGRES_USER: ${DB_USERNAME:-opsmate}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-opsmate}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.prod
+    image: opsmate-backend:prod
+    container_name: opsmate_backend
+    restart: always
+    env_file: ../backend/.env
+    environment:
+      DB_HOST: postgres
+      REDIS_HOST: redis
+    volumes:
+      - storage:/var/www/storage
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'php-fpm: master' > /dev/null || exit 1"]
+      timeout: 5s
+      retries: 5
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  queue:
+    image: opsmate-backend:prod
+    restart: always
+    command: php artisan queue:work --tries=3 --timeout=90
+    env_file: ../backend/.env
+    environment:
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      RUN_MIGRATIONS: "0"
+    volumes:
+      - storage:/var/www/storage
+    depends_on:
+      backend:
+        condition: service_started
+
+  scheduler:
+    image: opsmate-backend:prod
+    restart: always
+    command: php artisan schedule:work
+    env_file: ../backend/.env
+    environment:
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      RUN_MIGRATIONS: "0"
+    volumes:
+      - storage:/var/www/storage
+    depends_on:
+      backend:
+        condition: service_started
+
+  web:
+    build:
+      context: ..
+      dockerfile: frontend/Dockerfile.prod
+    image: opsmate-web:prod
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      backend:
+        condition: service_started
+
+volumes:
+  pgdata:
+  redisdata:
+  storage:

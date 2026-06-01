@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>OpsMate AI Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "tertiary-fixed": "#ffdbce",
+                  "surface-tint": "#006a63",
+                  "on-surface-variant": "#3e4947",
+                  "on-error": "#ffffff",
+                  "app-bg": "#F8FAFC",
+                  "surface-variant": "#e0e3e1",
+                  "surface-container-high": "#e5e9e7",
+                  "warning": "#F59E0B",
+                  "on-primary-fixed": "#00201d",
+                  "tertiary": "#7f4025",
+                  "on-tertiary": "#ffffff",
+                  "secondary-container": "#8a4cfc",
+                  "on-error-container": "#93000a",
+                  "cta-main": "#0D9488",
+                  "error": "#ba1a1a",
+                  "background": "#f7faf8",
+                  "danger": "#EF4444",
+                  "surface-container-highest": "#e0e3e1",
+                  "surface-bright": "#f7faf8",
+                  "on-background": "#181c1c",
+                  "on-secondary-fixed-variant": "#5a00c6",
+                  "secondary-fixed": "#eaddff",
+                  "surface-container-low": "#f1f4f3",
+                  "inverse-on-surface": "#eef1f0",
+                  "inverse-surface": "#2d3130",
+                  "ai-soft": "#EDE9FE",
+                  "primary": "#005c55",
+                  "on-secondary-fixed": "#25005a",
+                  "success": "#10B981",
+                  "secondary": "#712ae2",
+                  "tertiary-fixed-dim": "#ffb598",
+                  "tertiary-container": "#9c573a",
+                  "on-primary": "#ffffff",
+                  "surface": "#f7faf8",
+                  "primary-fixed-dim": "#80d5cb",
+                  "border": "#E2E8F0",
+                  "on-tertiary-container": "#ffe5db",
+                  "error-container": "#ffdad6",
+                  "text-main": "#0F172A",
+                  "on-secondary": "#ffffff",
+                  "info": "#3B82F6",
+                  "on-primary-container": "#a3faef",
+                  "outline": "#6e7977",
+                  "on-secondary-container": "#fffbff",
+                  "surface-container": "#ebefed",
+                  "on-tertiary-fixed-variant": "#72361b",
+                  "secondary-fixed-dim": "#d2bbff",
+                  "on-surface": "#181c1c",
+                  "on-primary-fixed-variant": "#00504a",
+                  "surface-container-lowest": "#ffffff",
+                  "on-tertiary-fixed": "#370e00",
+                  "primary-container": "#0f766e",
+                  "primary-soft": "#CCFBF1",
+                  "text-secondary": "#64748B",
+                  "primary-fixed": "#9cf2e8",
+                  "surface-dim": "#d7dbd9",
+                  "inverse-primary": "#80d5cb"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "padding-desktop": "24px",
+                  "padding-mobile": "16px",
+                  "gutter": "16px",
+                  "stack-lg": "24px",
+                  "stack-md": "16px",
+                  "sidebar-width": "260px",
+                  "stack-sm": "8px"
+          },
+          "fontFamily": {
+                  "display": ["Plus Jakarta Sans"],
+                  "caption": ["Inter"],
+                  "display-mobile": ["Plus Jakarta Sans"],
+                  "h3": ["Plus Jakarta Sans"],
+                  "body": ["Inter"],
+                  "body-sm": ["Inter"],
+                  "h2": ["Plus Jakarta Sans"],
+                  "h1": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+                  "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "caption": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                  "display-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                  "h3": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                  "body": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                  "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                  "h2": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                  "h1": ["28px", {"lineHeight": "36px", "fontWeight": "700"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    .ai-gradient-bg {
+      background: linear-gradient(135deg, #7C3AED 0%, #0D9488 100%);
+    }
+    .glass-effect {
+      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.8);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-app-bg text-text-main font-body antialiased">
+<!-- Top Navigation Bar -->
+<header class="bg-surface dark:bg-inverse-surface shadow-sm sticky top-0 z-50 flex justify-between items-center px-padding-mobile md:px-padding-desktop w-full h-16">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl ai-gradient-bg flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<h1 class="font-display text-h2-mobile font-bold text-cta-main">Tanya AI Assistant</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-text-secondary hover:text-cta-main transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<img alt="User" class="w-8 h-8 rounded-full border-2 border-primary-soft" data-alt="A close-up portrait of a professional business owner profile placeholder, using clean corporate aesthetics and a soft teal background. The image is minimalist with high-key lighting, representing a modern SME entrepreneur. Professional yet friendly vibe with a focus on digital management branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgZxzJzWQYRo0g_mKErU7vFGmwZ_vxvvnPQzD5MeOgiAiUb6XQjzK6hUZdw_brWemHkwpLscF7BhShtiZyXC3aSGMJdNrT4y9y_kNon5k4oDeTt8_Mb-HTCBmFJkJmiRrbq3ronB_eit8R0O-JRwQ_mX8pgZNBGRO5i5CNqIcKKLehWtv-voI_WFKJEG0HSpO1IyCNPhuyBKIi8GgIRqcZg9TAbTDbny_7GqlvX-VMIGuHEFzLKJ8IXyca5BhATsdEwnV1h9nquEZL"/>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex flex-col h-[calc(100vh-128px)] overflow-hidden">
+<!-- Chat History -->
+<div class="flex-1 overflow-y-auto px-padding-mobile py-6 flex flex-col gap-6 scroll-behavior-smooth scrollbar-hide" id="chat-container">
+<!-- Business Context Card (Bento Style) -->
+<div class="bg-white rounded-xl p-4 shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-border flex items-center gap-4">
+<div class="bg-primary-soft p-3 rounded-lg text-cta-main">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">storefront</span>
+</div>
+<div>
+<h3 class="font-display text-body font-bold text-text-main">Rina Catering</h3>
+<p class="font-body-sm text-text-secondary">12 order hari ini</p>
+</div>
+<div class="ml-auto">
+<span class="px-2 py-1 bg-success/10 text-success text-[10px] font-bold rounded-full uppercase tracking-wider">Aktif</span>
+</div>
+</div>
+<!-- AI Greeting -->
+<div class="flex gap-3 max-w-[85%]">
+<div class="w-8 h-8 rounded-lg ai-gradient-bg flex-shrink-0 flex items-center justify-center text-white text-[18px]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="bg-white p-4 rounded-tr-2xl rounded-br-2xl rounded-bl-2xl shadow-sm border border-border">
+<p class="font-body text-body-sm leading-relaxed">Halo Kak Rina! Selamat pagi. Ada 3 customer belum bayar hari ini. Mau saya bantu buatkan pesan follow-up agar cashflow aman?</p>
+</div>
+<span class="text-[10px] text-text-secondary px-1">09:41 AM</span>
+</div>
+</div>
+<!-- Actionable Cards in Chat -->
+<div class="flex flex-col gap-3 ml-11 max-w-[85%]">
+<div class="bg-white rounded-xl border border-border overflow-hidden shadow-sm">
+<div class="p-4 border-b border-border flex justify-between items-center">
+<div>
+<p class="font-body text-caption text-text-secondary">Pelanggan</p>
+<h4 class="font-display text-body-sm font-bold text-text-main">Sinta Permata</h4>
+</div>
+<div class="text-right">
+<p class="font-body text-caption text-text-secondary">Total Tagihan</p>
+<h4 class="font-display text-body-sm font-bold text-danger">Rp250.000</h4>
+</div>
+</div>
+<button class="w-full py-3 px-4 bg-primary-soft text-cta-main font-bold text-body-sm flex items-center justify-center gap-2 hover:bg-cta-main hover:text-white transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+            Buat Pesan WhatsApp
+          </button>
+</div>
+<div class="bg-white rounded-xl border border-border overflow-hidden shadow-sm opacity-80">
+<div class="p-4 border-b border-border flex justify-between items-center">
+<div>
+<p class="font-body text-caption text-text-secondary">Pelanggan</p>
+<h4 class="font-display text-body-sm font-bold text-text-main">Budi Santoso</h4>
+</div>
+<div class="text-right">
+<p class="font-body text-caption text-text-secondary">Total Tagihan</p>
+<h4 class="font-display text-body-sm font-bold text-danger">Rp125.000</h4>
+</div>
+</div>
+<button class="w-full py-3 px-4 bg-primary-soft text-cta-main font-bold text-body-sm flex items-center justify-center gap-2 hover:bg-cta-main hover:text-white transition-all">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+            Buat Pesan WhatsApp
+          </button>
+</div>
+</div>
+</div>
+<!-- Bottom Input & Prompts Area -->
+<div class="bg-surface p-padding-mobile pb-2 gap-4 flex flex-col shadow-[0_-4px_12px_rgba(0,0,0,0.03)]">
+<!-- Suggested Prompt Chips -->
+<div class="flex gap-2 overflow-x-auto scrollbar-hide py-1">
+<button class="whitespace-nowrap px-4 py-2 bg-white border border-border rounded-full text-body-sm text-text-secondary hover:border-cta-main hover:text-cta-main transition-colors shadow-sm">
+          Hari ini gimana?
+        </button>
+<button class="whitespace-nowrap px-4 py-2 bg-white border border-border rounded-full text-body-sm text-text-secondary hover:border-cta-main hover:text-cta-main transition-colors shadow-sm">
+          Siapa belum bayar?
+        </button>
+<button class="whitespace-nowrap px-4 py-2 bg-white border border-border rounded-full text-body-sm text-text-secondary hover:border-cta-main hover:text-cta-main transition-colors shadow-sm">
+          Buat laporan harian
+        </button>
+</div>
+<!-- Input Area -->
+<div class="relative flex items-center gap-2 mb-20">
+<div class="flex-1 relative">
+<input class="w-full h-14 pl-4 pr-12 rounded-xl border border-border focus:ring-2 focus:ring-cta-main focus:border-cta-main bg-white shadow-sm font-body text-body-sm" placeholder="Tanya sesuatu..." type="text"/>
+<button class="absolute right-2 top-2 h-10 w-10 flex items-center justify-center text-text-secondary hover:text-cta-main">
+<span class="material-symbols-outlined">mic</span>
+</button>
+</div>
+<button class="h-14 w-14 rounded-xl ai-gradient-bg text-white shadow-lg flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface dark:bg-inverse-surface shadow-[0_-4px_12px_rgba(0,0,0,0.06)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant active:bg-surface-container active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-caption text-caption">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant active:bg-surface-container active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-caption text-caption">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant active:bg-surface-container active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-4xl text-cta-main">add_circle</span>
+<span class="font-caption text-caption">Add</span>
+</a>
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant active:bg-surface-container active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-caption text-caption">Reminder</span>
+</a>
+<a class="flex flex-col items-center justify-center text-cta-main font-bold active:bg-surface-container active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-caption text-caption">AI</span>
+</a>
+</nav>
+<script>
+    // Smooth scrolling for chat container on load
+    window.onload = () => {
+      const container = document.getElementById('chat-container');
+      container.scrollTop = container.scrollHeight;
+    };
+
+    // Simple interaction for input focus
+    const input = document.querySelector('input');
+    input.addEventListener('focus', () => {
+      // Logic for mobile keyboard adjustment could go here
+    });
+  </script>
+</body></html>

@@ -1,0 +1,2 @@
+# Taruh sertifikat TLS produksi di folder ini (fullchain.pem, privkey.pem).
+# Isi folder di-ignore oleh .gitignore — JANGAN commit private key.

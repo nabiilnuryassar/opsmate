@@ -1,0 +1,51 @@
+# OpsMate AI backend — PRODUCTION image (PHP-FPM, not the dev server).
+FROM php:8.4-fpm-alpine
+
+# System libs + PHP extensions needed at runtime.
+RUN apk add --no-cache \
+        postgresql-dev \
+        oniguruma-dev \
+        libzip-dev \
+        icu-dev \
+    && docker-php-ext-install -j"$(nproc)" \
+        pdo_pgsql \
+        pgsql \
+        mbstring \
+        bcmath \
+        pcntl \
+        zip \
+        intl \
+        opcache
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www
+
+# Production PHP + opcache tuning.
+COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY docker/php/php.ini /usr/local/etc/php/conf.d/zz-opsmate.ini
+
+# Install PHP deps first (better layer caching), production-only + optimized.
+COPY composer.json composer.lock ./
+RUN composer install \
+        --no-dev \
+        --optimize-autoloader \
+        --no-interaction \
+        --no-scripts \
+        --prefer-dist
+
+# App source.
+COPY . .
+
+# Finalize autoloader now that all source (incl. packages discovery) is present.
+RUN composer dump-autoload --optimize --no-dev \
+    && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+# Entrypoint runs migrations + cache warmup, then starts php-fpm.
+COPY docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+EXPOSE 9000
+
+ENTRYPOINT ["entrypoint.sh"]
+CMD ["php-fpm"]

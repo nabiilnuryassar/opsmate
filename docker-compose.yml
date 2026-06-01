@@ -1,0 +1,104 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: opsmate-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: opsmate
+      POSTGRES_USER: opsmate
+      POSTGRES_PASSWORD: opsmate
+    volumes:
+      - opsmate-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opsmate -d opsmate"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: opsmate-redis
+    restart: unless-stopped
+    volumes:
+      - opsmate-redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: opsmate-backend
+    container_name: opsmate-backend
+    restart: unless-stopped
+    working_dir: /var/www
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    environment:
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      MAIL_HOST: host.docker.internal
+      MAIL_PORT: "1025"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/var/www
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  queue:
+    image: opsmate-backend
+    container_name: opsmate-queue
+    restart: unless-stopped
+    working_dir: /var/www
+    command: php artisan queue:work --tries=3 --timeout=90
+    environment:
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      MAIL_HOST: host.docker.internal
+      MAIL_PORT: "1025"
+    volumes:
+      - ./backend:/var/www
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      backend:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    image: node:22-alpine
+    container_name: opsmate-frontend
+    restart: unless-stopped
+    working_dir: /app
+    # Install deps if missing, then run the Vite dev server bound to all interfaces.
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    environment:
+      # Proxy /api to the backend over the compose network.
+      VITE_PROXY_TARGET: http://backend:8000
+      # Browser reaches HMR via the published host port.
+      VITE_HMR_CLIENT_PORT: "5174"
+      # Bind-mounted source on Windows needs polling for HMR.
+      VITE_POLL: "1"
+    ports:
+      - "5174:5173"
+    volumes:
+      - ./frontend:/app
+      - opsmate-frontend-node-modules:/app/node_modules
+    depends_on:
+      backend:
+        condition: service_started
+
+volumes:
+  opsmate-pgdata:
+  opsmate-redisdata:
+  opsmate-frontend-node-modules:
