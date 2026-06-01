@@ -1,8 +1,8 @@
 <div align="center">
 
-# OpsMate AI
+# OpsMate
 
-**AI Ops Manager untuk UMKM & bisnis jasa kecil.**
+**Ops Manager untuk UMKM & bisnis jasa kecil.**
 
 Catat order, kelola customer & stok, buat invoice, kirim reminder, dan dapatkan ringkasan bisnis harian dari AI — semua dalam satu aplikasi yang ringan dan mobile-first.
 
@@ -20,7 +20,7 @@ Catat order, kelola customer & stok, buat invoice, kirim reminder, dan dapatkan 
 
 Banyak UMKM gagal bukan karena produknya jelek, tapi karena **operasionalnya berantakan** — order lupa dicatat, pembayaran tidak terpantau, stok habis mendadak, tidak ada laporan harian.
 
-OpsMate AI membantu owner bisnis kecil supaya bisnisnya **lebih rapi, tidak ada yang terlewat, dan tahu kondisi bisnis setiap hari**. Dibangun untuk yang masih mengandalkan WhatsApp, catatan manual, atau Excel.
+OpsMate membantu owner bisnis kecil supaya bisnisnya **lebih rapi, tidak ada yang terlewat, dan tahu kondisi bisnis setiap hari**. Dibangun untuk yang masih mengandalkan WhatsApp, catatan manual, atau Excel.
 
 ## Fitur
 
@@ -33,15 +33,15 @@ OpsMate AI membantu owner bisnis kecil supaya bisnisnya **lebih rapi, tidak ada 
 - 📊 **Dashboard** — metrik harian, omzet, belum bayar, stok menipis
 - 🧮 **Invoice** — generate dari order, PDF, teks WhatsApp
 - ⏰ **Reminder otomatis** — belum bayar, jatuh tempo, stok rendah, customer tidak aktif
-- 📈 **Stok** — auto-kurang saat order selesai, riwayat pergerakan
+- 📈 **Stok** — auto-kurang saat order seles, riwayat pergerakan
 - 📅 **Laporan harian** otomatis + export PDF
-- 🤖 **AI Assistant** — tanya kondisi bisnis, draft follow-up, ide promo — **berbasis data asli, tidak mengarang**
+- 🤖 ** Assistant** — tanya kondisi bisnis, draft follow-up, ide promo — **berbasis data asli, tidak mengarang**
 
 ## Tech Stack
 
 | Layer | Teknologi |
 | ----- | --------- |
-| Frontend | React 19, TypeScript, Vite, Tailwind CSS v4, TanStack Query, Zustand, React Hook Form + Zod, React Router, Recharts |
+| Frontend | React 19, TypeScript, Vite, Tlwind CSS v4, TanStack Query, Zustand, React Hook Form + Zod, React Router, Recharts |
 | Backend | Laravel 13 (API-only), Sanctum, PHP 8.4, DomPDF |
 | Data | PostgreSQL 16, Redis 7 (cache/session/queue/rate-limit) |
 | AI | OpenAI-compatible API via controlled tools + **fallback deterministik** (jalan tanpa API key) |
