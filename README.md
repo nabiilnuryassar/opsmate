@@ -35,7 +35,7 @@ OpsMate membantu owner bisnis kecil supaya bisnisnya **lebih rapi, tidak ada yan
 - ⏰ **Reminder otomatis** — belum bayar, jatuh tempo, stok rendah, customer tidak aktif
 - 📈 **Stok** — auto-kurang saat order seles, riwayat pergerakan
 - 📅 **Laporan harian** otomatis + export PDF
-- 🤖 ** Assistant** — tanya kondisi bisnis, draft follow-up, ide promo — **berbasis data asli, tidak mengarang**
+- 🤖 **Assistant** — tanya kondisi bisnis, draft follow-up, ide promo — **berbasis data asli, tidak mengarang**
 
 ## Tech Stack
 
